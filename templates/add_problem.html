@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-card">
+    <h2>Report a New Problem</h2>
+
+    <form action="/submit" method="POST" enctype="multipart/form-data">
+        <label>Category</label>
+        <select name="category" required>
+            <option value="pothole">Pothole</option>
+            <option value="garbage">Garbage Dump</option>
+            <option value="water">Water Leakage</option>
+            <option value="electricity">Street Light Out</option>
+        </select>
+
+        <label>Description</label>
+        <textarea name="description" placeholder="Describe the issue..."
+            required></textarea>
+
+        <label>Location (Area / City / Pincode)</label>
+        <input
+            type="text"
+            name="location"
+            placeholder="e.g. Wakad, Pune - 411057"
+            required>
+
+        <label>Upload Evidence (Photo)</label>
+        <input type="file" name="image" id="imageInput" accept="image/*">
+
+        <div id="ml-feedback" class="hidden">Analyzing image with AI...</div>
+
+        <button type="submit" class="btn-submit">Post Problem</button>
+
+    </form>
+</div>
+
+{% endblock %}
