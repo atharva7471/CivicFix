@@ -43,7 +43,9 @@ def add_problem():
 def submit_problem():
     category = request.form.get("category")
     description = request.form.get("description")
-    location = request.form.get("location")
+    latitude = float(request.form.get("latitude"))
+    longitude = float(request.form.get("longitude"))
+    area_name = request.form.get("area_name") 
     image = request.files.get("image")
 
     filename = None
@@ -52,13 +54,18 @@ def submit_problem():
         image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
     problem = {
-        "category": category.capitalize(),
+        "category": category,
         "description": description,
-        "location": location,
+        # 📍 LOCATION DATA
+        "location": {
+            "type": "Point",
+            "coordinates": [longitude, latitude],  # IMPORTANT: lng first
+            "area_name": area_name
+        },
         "image": f"uploads/{filename}" if filename else None,
         "status": "pending",
         "votes": 0,
-        "created_at": datetime.utcnow()
+        "created_at": datetime.utcnow(),
     }
     problems_collection.insert_one(problem)
     return redirect(url_for("feed"))

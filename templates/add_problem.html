@@ -6,29 +6,50 @@
     <h2>Report a New Problem</h2>
 
     <form action="/submit" method="POST" enctype="multipart/form-data">
-        <label>Category</label>
+        <label>Category *</label>
         <select name="category" required>
-            <option value="pothole">Pothole</option>
-            <option value="garbage">Garbage Dump</option>
-            <option value="water">Water Leakage</option>
-            <option value="electricity">Street Light Out</option>
+            <option value>-- Select Category --</option>
+            <option value="Road / Pothole">Road / Pothole</option>
+            <option value="Garbage">Garbage</option>
+            <option value="Water">Water Supply</option>
+            <option value="Drainage">Drainage</option>
+            <option value="Electricity">Electricity / Street Light</option>
+            <option value="Public Safety">Public Safety</option>
+            <option value="Other">Other</option>
         </select>
 
         <label>Description</label>
         <textarea name="description" placeholder="Describe the issue..."
             required></textarea>
 
-        <label>Location (Area / City / Pincode)</label>
-        <input
-            type="text"
-            name="location"
-            placeholder="e.g. Wakad, Pune - 411057"
-            required>
-
         <label>Upload Evidence (Photo)</label>
         <input type="file" name="image" id="imageInput" accept="image/*">
 
         <div id="ml-feedback" class="hidden">Analyzing image with AI...</div>
+
+        <label>Select Location on Map *</label>
+
+        <label>Search Location</label>
+        <input
+            type="text"
+            id="location-search"
+            placeholder="Search area, landmark, city...">
+
+        <div id="map" style="height: 300px; margin-bottom: 10px;"></div>
+
+        <!-- Hidden fields for backend -->
+        <input type="hidden" name="latitude" id="latitude" required>
+        <input type="hidden" name="longitude" id="longitude" required>
+        <input type="hidden" name="area_name" id="area-name-input">
+
+        <small>Click on the map to mark the exact location</small>
+
+        <div id="location-info" class="location-info">
+            <strong>Selected Location:</strong>
+            <span id="coords-text">Not selected</span>
+        </div>
+
+        <div id="area-name" class="area-name"></div>
 
         <button type="submit" class="btn-submit">Post Problem</button>
 

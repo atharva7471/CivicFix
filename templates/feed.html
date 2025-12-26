@@ -25,10 +25,9 @@
         {% endif %}
 
         <div class="card-body">
-            <h3>{{ problem.title }}</h3>
             <p class="description">{{ problem.description }}</p>
             <div class="location-info">
-                📍 {{ problem.location }}
+                📍 {{ problem.location.area_name }}
             </div>
         </div>
 
