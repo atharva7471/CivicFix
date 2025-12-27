@@ -27,13 +27,12 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 #--------------------- All Routes here --------------------------#
 @app.route("/")
-@app.route("/feed")
-def feed():
+@app.route("/home")
+def home():
     problems = list(
         problems_collection.find().sort("created_at", -1)
     )
-    return render_template("feed.html", problems=problems)
-
+    return render_template("home.html", problems=problems)
 
 @app.route("/add_problem")
 def add_problem():
@@ -68,7 +67,7 @@ def submit_problem():
         "created_at": datetime.utcnow(),
     }
     problems_collection.insert_one(problem)
-    return redirect(url_for("feed"))
+    return redirect(url_for("home"))
 
 @app.route("/vote/<problem_id>", methods=["POST"])
 def vote(problem_id):
@@ -128,7 +127,6 @@ def register():
         })
 
         return redirect(url_for("login"))
-
     return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -146,8 +144,7 @@ def login():
         session["user_id"] = str(user["_id"])
         session["user_name"] = user["name"]
 
-        return redirect(url_for("feed"))
-
+        return redirect(url_for("home"))
     return render_template("login.html")
 
 @app.route("/logout")

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}CivicFix - Solve Together{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/home.css') }}">
+    </head>
+    <body>
+        <!-- NAVBAR (single navbar) -->
+        <nav class="navbar" id="navbar">
+            <div class="logo">CivicFix</div>
+            <ul class="nav-links">
+                <li><a href="/home">Feed</a></li>
+                <li><a href="/add_problem">Report Issue</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            <button class="theme-toggle" id="themeToggle"
+                aria-label="Toggle dark mode">
+                <svg
+                    class="theme-icon"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <!-- Sun -->
+                    <circle cx="12" cy="12" r="5" class="sun-core" />
+                    <g class="sun-rays">
+                        <line x1="12" y1="1" x2="12" y2="4" />
+                        <line x1="12" y1="20" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" />
+                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="4" y2="12" />
+                        <line x1="20" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" />
+                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
+                    </g>
+
+                    <!-- Moon -->
+                    <path
+                        class="moon"
+                        d="M21 12.8A9 9 0 0111.2 3a7 7 0 100 14A9 9 0 0121 12.8z" />
+                </svg>
+            </button>
+        </nav>
+
+        <!-- HERO -->
+        <header class="hero" id="feed">
+            <div class="hero-content">
+                <h1>Report Civic Issues</h1>
+                <p>Make problems visible in your local area</p>
+                <a href="/add_problem" class="btn-primary">Report an Issue</a>
+            </div>
+        </header>
+
+        <div class="container">
+
+            <div class="feed-header">
+                <h1>Problems in Your Area</h1>
+            </div>
+
+            <div class="feed-container">
+                {% if problems|length == 0 %}
+                <p style="text-align:center;">No problems reported yet.</p>
+                {% endif %}
+
+                {% for problem in problems %}
+                <div class="problem-card">
+                    <div class="card-header">
+                        <span class="category-tag">{{ problem.category }}</span>
+                        <span class="status-badge pending">
+                            {{ problem.status|capitalize }}
+                        </span>
+                    </div>
+
+                    {% if problem.image %}
+                    <img src="{{ url_for('static', filename=problem.image) }}"
+                        class="problem-img">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <p class="description">{{ problem.description }}</p>
+                        <div class="location-info">
+                            📍 {{ problem.location.area_name }}
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="vote-btn" data-id="{{ problem._id }}">
+                            ▲ <span>{{ problem.votes }} Votes</span>
+                        </button>
+                        <button class="share-btn">Share</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    </body>
+</html>

@@ -1,0 +1,94 @@
+/* Login Page */
+/* Page background */
+.auth-page {
+  background: linear-gradient(
+    180deg,
+    var(--bg-body) 0%,
+    var(--bg-secondary) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  margin-top: 90px;
+}
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--card-bg);
+  border-radius: 18px;
+  padding: 36px 32px;
+  box-shadow: var(--card-shadow);
+  text-align: center;
+}
+.auth-card h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-card input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-card input:focus {
+  outline: none;
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+.auth-card button {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-card button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+}
+.auth-card p {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.auth-card a {
+  color: var(--accent-secondary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-card a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 28px 22px;
+  }
+
+  .auth-card h2 {
+    font-size: 1.4rem;
+  }
+}
+
+/* Register Page */

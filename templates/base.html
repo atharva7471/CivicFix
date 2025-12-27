@@ -1,32 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>CivicFix - Solve Together</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}CivicFix - Solve Together{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet"
-            href="{{ url_for('static', filename='css/style.css') }}">
-        <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    </head>
-    <body>
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/add_problem.css') }}">
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/login_register.css') }}">
+    <!-- For map -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  </head>
+  <body>
+    <nav class="navbar" id="navbar">
+      <div class="logo">CivicFix</div>
+      <ul class="nav-links">
+        <li><a href="/home">Feed</a></li>
+        <li><a href="/add_problem">Report Issue</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+      <button class="theme-toggle" id="themeToggle"
+        aria-label="Toggle dark mode">
+        <svg
+          class="theme-icon"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <!-- Sun -->
+          <circle cx="12" cy="12" r="5" class="sun-core" />
+          <g class="sun-rays">
+            <line x1="12" y1="1" x2="12" y2="4" />
+            <line x1="12" y1="20" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34" />
+            <line x1="17.66" y1="17.66" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="4" y2="12" />
+            <line x1="20" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="6.34" y2="17.66" />
+            <line x1="17.66" y1="6.34" x2="19.78" y2="4.22" />
+          </g>
 
-        <nav class="navbar">
-            <div class="logo">CivicFix</div>
-            <ul class="nav-links">
-                <li><a href="/feed">Feed</a></li>
-                <li><a href="/add_problem">Report Issue</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-        </nav>
-
-        <div class="container">
-            {% block content %}{% endblock %}
-        </div>
-
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    </body>
+          <!-- Moon -->
+          <path
+            class="moon"
+            d="M21 12.8A9 9 0 0111.2 3a7 7 0 100 14A9 9 0 0121 12.8z" />
+        </svg>
+      </button>
+    </nav>
+    <div class="container">
+      {% block container %}{% endblock %}
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
 </html>

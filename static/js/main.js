@@ -1,128 +1,149 @@
-// Image preview & ML placeholder
-const imageInput = document.getElementById("imageInput");
-
-if (imageInput) {
-  imageInput.addEventListener("change", () => {
-    const file = imageInput.files[0];
-    if (file) {
-      const mlFeedback = document.getElementById("ml-feedback");
-      mlFeedback.classList.remove("hidden");
-      mlFeedback.innerText = "Analyzing image with AI...";
-    }
-  });
-}
-
-//Vote Button for Backend
-document.querySelectorAll(".vote-btn").forEach((button) => {
-  button.addEventListener("click", () => {
-    const problemId = button.dataset.id;
-
-    fetch(`/vote/${problemId}`, {
-      method: "POST",
-    })
-      .then(async (res) => {
-        const data = await res.json();
-
-        // ❌ Handle error responses
-        if (!res.ok) {
-          alert(data.error || "Voting failed");
-          return;
-        }
-
-        // ✅ Success case
-        button.querySelector("span").innerText = data.votes + " Votes";
-
-        button.classList.add("voted");
-        button.disabled = true;
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Something went wrong. Try again.");
-      });
-  });
-});
-
-// Map Addition
-// Map Addition
 document.addEventListener("DOMContentLoaded", function () {
+  /* =========================
+     IMAGE PREVIEW / ML FEEDBACK
+     ========================= */
+  const imageInput = document.getElementById("imageInput");
+  if (imageInput) {
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const mlFeedback = document.getElementById("ml-feedback");
+        if (mlFeedback) {
+          mlFeedback.classList.remove("hidden");
+          mlFeedback.innerText = "Analyzing image with AI...";
+        }
+      }
+    });
+  }
+
+  /* =========================
+     VOTING
+     ========================= */
+  document.querySelectorAll(".vote-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const problemId = button.dataset.id;
+
+      fetch(`/vote/${problemId}`, { method: "POST" })
+        .then(async (res) => {
+          const data = await res.json();
+
+          if (!res.ok) {
+            alert(data.error || "Voting failed");
+            return;
+          }
+
+          button.querySelector("span").innerText = data.votes + " Votes";
+          button.classList.add("voted");
+          button.disabled = true;
+        })
+        .catch(() => alert("Something went wrong. Try again."));
+    });
+  });
+
+  /* =========================
+     MAP (ADD PROBLEM ONLY)
+     ========================= */
   const mapElement = document.getElementById("map");
-  if (!mapElement) return;
+  if (mapElement) {
+    const map = L.map("map").setView([19.076, 72.8777], 12);
 
-  const map = L.map("map").setView([19.076, 72.8777], 12);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors",
-  }).addTo(map);
+    let marker;
 
-  let marker;
+    function setMarker(lat, lng) {
+      if (marker) map.removeLayer(marker);
+      marker = L.marker([lat, lng]).addTo(map);
 
-  // 🔹 Place marker + store coordinates
-  function setMarker(lat, lng) {
-    if (marker) map.removeLayer(marker);
+      document.getElementById("latitude").value = lat;
+      document.getElementById("longitude").value = lng;
 
-    marker = L.marker([lat, lng]).addTo(map);
+      document.getElementById("coords-text").innerText = `Lat: ${lat.toFixed(
+        5
+      )}, Lng: ${lng.toFixed(5)}`;
 
-    // Store for backend
-    document.getElementById("latitude").value = lat;
-    document.getElementById("longitude").value = lng;
-
-    // Show coordinates to user
-    document.getElementById("coords-text").innerText = `Lat: ${lat.toFixed(
-      5
-    )}, Lng: ${lng.toFixed(5)}`;
-
-    // Fetch area name
-    reverseGeocode(lat, lng);
-  }
-
-  // 🔹 Map click
-  map.on("click", function (e) {
-    setMarker(e.latlng.lat, e.latlng.lng);
-  });
-
-  // 🔹 Search location
-  const searchInput = document.getElementById("location-search");
-
-  searchInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      searchLocation(searchInput.value);
+      reverseGeocode(lat, lng);
     }
-  });
 
-  function searchLocation(query) {
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data.length) {
-          alert("Location not found");
-          return;
+    map.on("click", (e) => setMarker(e.latlng.lat, e.latlng.lng));
+
+    const searchInput = document.getElementById("location-search");
+    if (searchInput) {
+      searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          searchLocation(searchInput.value);
         }
-
-        const place = data[0];
-        const lat = parseFloat(place.lat);
-        const lng = parseFloat(place.lon);
-
-        map.setView([lat, lng], 15);
-        setMarker(lat, lng);
       });
+    }
+
+    function searchLocation(query) {
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.length) return alert("Location not found");
+          const lat = parseFloat(data[0].lat);
+          const lng = parseFloat(data[0].lon);
+          map.setView([lat, lng], 15);
+          setMarker(lat, lng);
+        });
+    }
+
+    function reverseGeocode(lat, lng) {
+      fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.display_name) {
+            document.getElementById(
+              "area-name"
+            ).innerText = `📍 ${data.display_name}`;
+            document.getElementById("area-name-input").value =
+              data.display_name;
+          }
+        });
+    }
   }
 
-  // 🔹 Reverse geocoding (coords → area name)
-  function reverseGeocode(lat, lng) {
-    fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.display_name) {
-          document.getElementById(
-            "area-name"
-          ).innerText = `📍 ${data.display_name}`;
+  /* =========================
+     HERO NAVBAR SCROLL (HOME ONLY)
+     ========================= */
+  const navbar = document.getElementById("navbar");
+  const hero = document.querySelector(".hero");
 
-          // Store for backend
-          document.getElementById("area-name-input").value = data.display_name;
-        }
-      });
+  if (navbar && hero) {
+    const heroHeight = hero.offsetHeight;
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > heroHeight - 80) {
+        navbar.classList.add("fixed");
+      } else {
+        navbar.classList.remove("fixed");
+      }
+    });
+  }
+
+  /* =========================
+     DARK MODE TOGGLE (ALL PAGES)
+     ========================= */
+  const toggleBtn = document.getElementById("themeToggle");
+
+  // Load saved theme
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+
+      localStorage.setItem(
+        "theme",
+        document.body.classList.contains("dark") ? "dark" : "light"
+      );
+    });
   }
 });
