@@ -1,4 +1,15 @@
 {% extends "base.html" %}
+
+{% block title %}Report Issue - CivicFix{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_problem.css') }}">
+<!-- Leaflet (needed globally if map JS runs conditionally) -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endblock %}
+
 {% block container %}
 <div class="form-card">
     <h2>Report a New Problem</h2>
@@ -53,5 +64,9 @@
 
     </form>
 </div>
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/add_problem.js') }}"></script>
+{% endblock %}
 
 {% endblock %}

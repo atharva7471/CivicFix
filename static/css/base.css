@@ -1,174 +1,258 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* =========================
+   FONT
+   ========================= */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* =========================
+   CSS VARIABLES
+   ========================= */
+:root {
+  /* Backgrounds */
+  --bg-body: #f3f4f6;
+  --bg-primary: #ffffff;
+
+  /* Text */
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-inverse: #ffffff;
+  --always-white: #f3f4f6;
+
+  /* Accent */
+  --accent-primary: #4f46e5;
+  --accent-secondary: #4338ca;
+
+  /* Borders & shadows */
+  --border-light: #e5e7eb;
+  --navbar-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+
+  /* Navbar */
+  --navbar-bg: #ffffff;
+  --navbar-text: #111827;
+}
+
+.dark {
+  --bg-body: #0b0f19;
+  --bg-primary: #111827;
+
+  --text-primary: #e5e7eb;
+  --text-secondary: #c7d2fe;
+  --text-muted: #9ca3af;
+  --text-inverse: #020617;
+
+  --accent-primary: #818cf8;
+  --accent-secondary: #6366f1;
+
+  --border-light: #1f2937;
+  --navbar-bg: #0b0f19;
+  --navbar-text: #e5e7eb;
+  --navbar-shadow: 0 10px 28px rgba(0, 0, 0, 0.85);
+}
 
 /* =========================
    GLOBAL RESET
    ========================= */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', system-ui, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background: var(--bg-body);
-    color: var(--text-primary);
+  font-family: "Poppins", system-ui, sans-serif;
+  background: var(--bg-body);
+  color: var(--text-primary);
+  line-height: 1.5;
 }
 
 /* =========================
-   THEME VARIABLES
-   ========================= */
-:root {
-    /* Backgrounds */
-    --bg-body: #f6f7f9;
-    --bg-primary: #ffffff;
-    --bg-secondary: #eef2f6;
-    --bg-hero-overlay: rgba(20, 32, 48, 0.45);
-
-    /* Text */
-    --text-primary: #1f2937;
-    /* dark slate */
-    --text-secondary: #4b5563;
-    --text-muted: #6b7280;
-    --text-inverse: #ffffff;
-
-    /* Brand / Accent (from bridge lights) */
-    --accent-primary: #d4a373;
-    /* warm amber */
-    --accent-secondary: #2563eb;
-    /* civic blue (CTA) */
-    --accent-soft: #fdebd2;
-
-    /* Status colors */
-    --status-open: #2563eb;
-    --status-pending: #d97706;
-    --status-resolved: #16a34a;
-
-    /* Borders & dividers */
-    --border-light: #e5e7eb;
-    --border-soft: #d1d5db;
-
-    /* Cards */
-    --card-bg: #ffffff;
-    --card-shadow: 0 10px 32px rgba(0, 0, 0, 0.08);
-
-    /* Buttons */
-    --btn-primary-bg: #2563eb;
-    --btn-primary-text: #ffffff;
-    --btn-secondary-bg: #e5e7eb;
-
-    /* Navbar */
-    --navbar-bg: #ffffff;
-    --navbar-text: #1f2937;
-    --navbar-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-.dark {
-    /* Backgrounds */
-    --bg-body: #0f172a;
-    --bg-primary: #111827;
-    --bg-secondary: #1e293b;
-    --bg-hero-overlay: rgba(10, 15, 25, 0.65);
-
-    /* Text */
-    --text-primary: #e5e7eb;
-    --text-secondary: #cbd5f5;
-    --text-muted: #94a3b8;
-    --text-inverse: #0f172a;
-
-    /* Accent (warm lights still pop in dark) */
-    --accent-primary: #f1b97a;
-    --accent-secondary: #3b82f6;
-    --accent-soft: #3a2a1a;
-
-    /* Status colors */
-    --status-open: #3b82f6;
-    --status-pending: #f59e0b;
-    --status-resolved: #22c55e;
-
-    /* Borders */
-    --border-light: #1f2937;
-    --border-soft: #334155;
-
-    /* Cards */
-    --card-bg: #111827;
-    --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-
-    /* Buttons */
-    --btn-primary-bg: #3b82f6;
-    --btn-primary-text: #ffffff;
-    --btn-secondary-bg: #1e293b;
-
-    /* Navbar */
-    --navbar-bg: #0f172a;
-    --navbar-text: #e5e7eb;
-    --navbar-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-}
-
-/* =========================
-   COMMON NAVBAR
+   NAVBAR
    ========================= */
 .navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 68px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 68px;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    padding: 0 64px;
-    background: var(--navbar-bg);
-    color: var(--navbar-text);
-    z-index: 1000;
+  padding: 0 64px;
+  background: var(--navbar-bg);
+  box-shadow: var(--navbar-shadow);
+  z-index: 1000;
 }
 
+/* Logo */
 .logo {
-    font-size: 1.3rem;
-    font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--navbar-text);
 }
 
+/* Navigation links */
 .nav-links {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 28px;
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  align-items: center;
 }
 
 .nav-links a {
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--navbar-text);
-    position: relative;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--navbar-text);
+  position: relative;
 }
 
+/* Hover underline */
 .nav-links a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    width: 0;
-    height: 2px;
-    background: var(--accent-secondary);
-    transition: width 0.2s ease;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: var(--accent-primary);
+  transition: width 0.2s ease;
 }
 
 .nav-links a:hover::after {
-    width: 100%;
+  width: 100%;
 }
 
+/* =========================
+   THEME TOGGLE (SVG ICONS)
+   ========================= */
+
+.theme-toggle {
+  position: relative;
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+
+  cursor: pointer;
+  transition: background 0.2s ease, border 0.2s ease;
+}
+
+/* Hover */
+.theme-toggle:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Icons */
+.theme-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Default (Light mode) */
+.sun-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.moon-icon {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* Dark mode */
+.dark .sun-icon {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.dark .moon-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Dark hover */
+.dark .theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* =========================
+   PAGE CONTAINER
+   ========================= */
+.container {
+  padding: 120px 64px 64px;
+  min-height: 100vh;
+  background: var(--bg-body);
+}
+
+/* =========================
+   BUTTON INTERACTIONS
+   ========================= */
+
+button,
+.btn-primary,
+.btn-submit {
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.2s ease;
+}
+
+button:hover,
+.btn-primary:hover,
+.btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+button:active,
+.btn-primary:active,
+.btn-submit:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* =========================
+   THEME TOGGLE MOTION
+   ========================= */
+
+.theme-toggle {
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.theme-toggle:hover {
+  transform: rotate(12deg) scale(1.05);
+}
+
+.dark .theme-toggle:hover {
+  transform: rotate(-12deg) scale(1.05);
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
 @media (max-width: 768px) {
-    .navbar {
-        padding: 0 24px;
-    }
+  .navbar {
+    padding: 0 24px;
+  }
 
-    .container {
-        padding: 100px 24px 40px;
-    }
+  .container {
+    padding: 100px 24px 40px;
+  }
 
-    .nav-links {
-        gap: 18px;
-    }
+  .nav-links {
+    gap: 18px;
+  }
 }

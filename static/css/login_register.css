@@ -1,32 +1,41 @@
-/* Login Page */
-/* Page background */
+/* =========================
+   AUTH PAGE LAYOUT
+   ========================= */
+
 .auth-page {
-  background: linear-gradient(
-    180deg,
-    var(--bg-body) 0%,
-    var(--bg-secondary) 100%
-  );
+  max-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  margin-top: 90px;
+  margin: 3rem;
 }
+
+/* =========================
+   AUTH CARD
+   ========================= */
+
 .auth-card {
   width: 100%;
   max-width: 420px;
-  background: var(--card-bg);
-  border-radius: 18px;
+  background: var(--bg-primary);
   padding: 36px 32px;
+  border-radius: 18px;
   box-shadow: var(--card-shadow);
   text-align: center;
 }
+
+/* Heading */
 .auth-card h2 {
   font-size: 1.6rem;
   font-weight: 600;
   margin-bottom: 24px;
   color: var(--text-primary);
 }
+
+/* =========================
+   FORM
+   ========================= */
+
 .auth-card form {
   display: flex;
   flex-direction: column;
@@ -37,43 +46,47 @@
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--border-light);
   background: var(--bg-primary);
   color: var(--text-primary);
   font-size: 0.95rem;
-  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Focus */
 .auth-card input:focus {
   outline: none;
-  border-color: var(--accent-secondary);
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  border-color: var(--accent-primary);
 }
+
+/* Submit button */
 .auth-card button {
-  margin-top: 12px;
+  margin-top: 10px;
   padding: 14px;
   border-radius: 12px;
   border: none;
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .auth-card button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+  background: var(--accent-secondary);
 }
+
+/* =========================
+   FOOTER TEXT
+   ========================= */
+
 .auth-card p {
-  margin-top: 20px;
+  margin-top: 18px;
   font-size: 0.9rem;
   color: var(--text-secondary);
 }
 
 .auth-card a {
-  color: var(--accent-secondary);
+  color: var(--accent-primary);
   text-decoration: none;
   font-weight: 500;
 }
@@ -81,6 +94,31 @@
 .auth-card a:hover {
   text-decoration: underline;
 }
+
+/* =========================
+   FORM INTERACTION
+   ========================= */
+
+input,
+textarea,
+select {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  transform: translateY(-1px);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
 @media (max-width: 480px) {
   .auth-card {
     padding: 28px 22px;
@@ -90,5 +128,3 @@
     font-size: 1.4rem;
   }
 }
-
-/* Register Page */

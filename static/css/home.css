@@ -1,110 +1,44 @@
-.navbar {
+/* =========================
+   HOME NAVBAR (ONLY HOME)
+   ========================= */
+
+body.home .navbar {
   position: absolute;
   top: 0;
-  width: 100%;
-  padding: 18px 64px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
   background: transparent;
-  transition: all 0.3s ease;
+  box-shadow: none;
 }
 
-.logo {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--text-inverse);
+/* White text on hero */
+body.home .navbar .logo,
+body.home .navbar a {
+  color: var(--always-white);
 }
 
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 24px;
-  align-items: center;
-}
-
-.nav-links a {
-  text-decoration: none;
-  font-weight: 500;
-  color: var(--text-inverse);
-}
-
-/* Fixed navbar */
-.navbar.fixed {
+/* Solid navbar after scroll */
+body.home .navbar.fixed {
   position: fixed;
   background: var(--navbar-bg);
   box-shadow: var(--navbar-shadow);
 }
 
-.navbar.fixed .logo,
-.navbar.fixed a {
+body.home .navbar.fixed .logo,
+body.home .navbar.fixed a {
   color: var(--navbar-text);
 }
 
 /* =========================
-   DARK MODE TOGGLE
+   HERO SECTION
    ========================= */
-.theme-toggle {
-  background: transparent;
-  border: 1px solid var(--border-light);
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  transition: background 0.3s ease, border 0.3s ease;
-}
 
-.theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* SVG styling */
-.theme-icon {
-  stroke: currentColor;
-  stroke-width: 1.8;
-  color: var(--text-inverse);
-  transition: transform 0.4s ease, color 0.3s ease;
-}
-
-/* Sun visible by default */
-.sun-core,
-.sun-rays {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.moon {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  fill: currentColor;
-}
-
-/* When dark mode */
-.dark .theme-icon {
-  color: var(--navbar-text);
-}
-
-.dark .sun-core,
-.dark .sun-rays {
-  opacity: 0;
-}
-
-.dark .moon {
-  opacity: 1;
-}
-
-/* =========================
-   Hero Section
-   ========================= */
 .hero {
   height: 100vh;
   background:
-    linear-gradient(to bottom,
-      rgba(20, 32, 48, 0.25),
-      var(--bg-hero-overlay)),
+    linear-gradient(
+      to bottom,
+      rgba(17, 24, 39, 0.35),
+      rgba(17, 24, 39, 0.65)
+    ),
     url("/static/images/home_bg.png") center / cover no-repeat;
 
   display: flex;
@@ -113,7 +47,7 @@
 }
 
 .hero-content {
-  max-width: 620px;
+  max-width: 640px;
   color: var(--text-inverse);
 }
 
@@ -121,22 +55,19 @@
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 12px;
-}
-
-.dark .navbar:not(.fixed) .logo,
-.dark .navbar:not(.fixed) a {
-  color: #e5e7eb;
+  color: var(--always-white);
 }
 
 .hero-content p {
   font-size: 1.1rem;
   margin-bottom: 28px;
-  color: #e5e7eb;
+  color: var(--always-white);
 }
 
+/* CTA button */
 .btn-primary {
-  background: var(--btn-primary-bg);
-  color: var(--btn-primary-text);
+  background: var(--accent-primary);
+  color: var(--text-inverse);
   padding: 14px 28px;
   border-radius: 10px;
   font-weight: 600;
@@ -145,13 +76,16 @@
 }
 
 /* =========================
-   Feed Section
+   FEED SECTION
    ========================= */
-.container {
-  padding: 80px 64px;
-  background: linear-gradient(180deg,
-      var(--bg-body) 0%,
-      var(--bg-secondary) 100%);
+
+body.home .container {
+  padding-top: 80px;
+  background: linear-gradient(
+    180deg,
+    var(--bg-body) 0%,
+    var(--bg-primary) 100%
+  );
 }
 
 .feed-header h1 {
@@ -159,18 +93,22 @@
   margin-bottom: 36px;
 }
 
+/* Grid */
 .feed-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
 
-/*********************** Problem card **********************/
+/* =========================
+   PROBLEM CARD
+   ========================= */
+
 .problem-card {
   background: var(--card-bg);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--navbar-shadow);
   display: flex;
   flex-direction: column;
 }
@@ -196,7 +134,7 @@
   padding: 4px 12px;
   border-radius: 20px;
   background: #fff7ed;
-  color: var(--status-pending);
+  color: var(--accent-secondary);
 }
 
 .problem-img {
@@ -238,8 +176,35 @@
 }
 
 /* =========================
-  Responsiveness
+   CARD ANIMATIONS
    ========================= */
+
+.problem-card {
+  animation: cardFadeUp 0.45s ease forwards;
+}
+
+@keyframes cardFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover */
+.problem-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
 @media (max-width: 1024px) {
   .feed-container {
     grid-template-columns: repeat(2, 1fr);
@@ -247,21 +212,18 @@
 }
 
 @media (max-width: 640px) {
-
-  .navbar,
-  .hero,
-  .container {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-
   .hero {
     height: 70vh;
-    padding-bottom: 60px;
+    padding: 0 24px 60px;
   }
 
   .hero-content h1 {
     font-size: 2.2rem;
+  }
+
+  body.home .container {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 
   .feed-container {
