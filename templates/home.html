@@ -8,13 +8,16 @@
             href="{{ url_for('static', filename='css/base.css') }}">
         <link rel="stylesheet"
             href="{{ url_for('static', filename='css/home.css') }}">
+        <link
+            href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+            rel="stylesheet" />
     </head>
     <body class="home">
         <!-- NAVBAR (single navbar) -->
-        <nav class="navbar" id="navbar">
+        <nav class="navbar" id="navbar" data-aos="fade-down">
             <div class="logo">CivicFix</div>
             <ul class="nav-links">
-                <li><a href="/home">Feed</a></li>
+                <li><a href="#" id="scrollToFeed">Feed</a></li>
                 <li><a href="/add_problem">Report Issue</a></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
@@ -32,56 +35,66 @@
         </nav>
 
         <!-- HERO -->
-        <header class="hero" id="feed">
-            <div class="hero-content">
+
+        <header class="hero">
+            <div class="hero-content" data-aos="fade-up">
                 <h1>Report Civic Issues</h1>
                 <p>Make problems visible in your local area</p>
-                <a href="/add_problem" class="btn-primary">Report an Issue</a>
+                <a href="/add_problem" class="btn-primary">Report an
+                    Issue</a>
             </div>
         </header>
+        <section id="feed-section"><section id="feed-section"></section>
+            <div class="container">
+                <div class="feed-header" data-aos="fade-up"
+                    data-aos-once="true">
+                    <h1>Problems in Your Area</h1>
+                </div>
 
-        <div class="container">
-            <div class="feed-header">
-                <h1>Problems in Your Area</h1>
-            </div>
-
-            <div class="feed-container">
-                {% if problems|length == 0 %}
-                <p style="text-align:center;">No problems reported yet.</p>
-                {% endif %}
-
-                {% for problem in problems %}
-                <div class="problem-card">
-                    <div class="card-header">
-                        <span class="category-tag">{{ problem.category }}</span>
-                        <span class="status-badge pending">
-                            {{ problem.status|capitalize }}
-                        </span>
-                    </div>
-
-                    {% if problem.image %}
-                    <img src="{{ url_for('static', filename=problem.image) }}"
-                        class="problem-img">
+                <div class="feed-container">
+                    {% if problems|length == 0 %}
+                    <p style="text-align:center;">No problems reported yet.</p>
                     {% endif %}
 
-                    <div class="card-body">
-                        <p class="description">{{ problem.description }}</p>
-                        <div class="location-info">
-                            📍 {{ problem.location.area_name }}
+                    {% for problem in problems %}
+                    <div class="problem-card" data-aos="fade-up"
+                        data-aos-delay="{{ loop.index0 * 100 }}"
+                        data-aos-once="true">
+                        <div class="card-header">
+                            <span class="category-tag">{{ problem.category
+                                }}</span>
+                            <span class="status-badge pending">
+                                {{ problem.status|capitalize }}
+                            </span>
+                        </div>
+
+                        {% if problem.image %}
+                        <img
+                            src="{{ url_for('static', filename=problem.image) }}"
+                            class="problem-img">
+                        {% endif %}
+
+                        <div class="card-body">
+                            <p class="description">{{ problem.description }}</p>
+                            <div class="location-info">
+                                📍 {{ problem.location.area_name }}
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button class="vote-btn"
+                                data-id="{{ problem._id }}">
+                                ▲ <span>{{ problem.votes }} Votes</span>
+                            </button>
+                            <button class="share-btn">Share</button>
                         </div>
                     </div>
-
-                    <div class="card-footer">
-                        <button class="vote-btn" data-id="{{ problem._id }}">
-                            ▲ <span>{{ problem.votes }} Votes</span>
-                        </button>
-                        <button class="share-btn">Share</button>
-                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
+        </section>
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+        <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     </body>
 </html>

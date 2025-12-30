@@ -39,3 +39,21 @@ if (navbar && hero) {
     }
   });
 }
+
+// Scroll to Feed section
+document.addEventListener("DOMContentLoaded", () => {
+  const feedBtn = document.getElementById("scrollToFeed");
+  const feedSection = document.getElementById("feed-section");
+
+  if (feedBtn && feedSection) {
+    feedBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      feedSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  }
+});
+

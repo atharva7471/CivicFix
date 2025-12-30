@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block container %}
-<div class="form-card">
+<div class="form-card" data-aos="fade-up">
     <h2>Report a New Problem</h2>
 
     <form action="/submit" method="POST" enctype="multipart/form-data">
@@ -44,7 +44,7 @@
             id="location-search"
             placeholder="Search area, landmark, city...">
 
-        <div id="map" style="height: 300px; margin-bottom: 10px;"></div>
+        <div id="map" style="height: 300px; margin-bottom: 10px;" data-aos="fade-up" data-aos-delay="200" data-aos-once="true"></div>
 
         <!-- Hidden fields for backend -->
         <input type="hidden" name="latitude" id="latitude" required>

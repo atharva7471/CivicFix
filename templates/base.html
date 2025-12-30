@@ -7,14 +7,17 @@
 
     <link rel="stylesheet"
       href="{{ url_for('static', filename='css/base.css') }}">
+    <link
+      href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+      rel="stylesheet" />
     <!-- Page specific CSS -->
     {% block head %}{% endblock %}
   </head>
   <body>
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" data-aos="fade-down" data-aos-once="false">
       <div class="logo">CivicFix</div>
       <ul class="nav-links">
-        <li><a href="/home">Feed</a></li>
+        <li><a href="/home" id="scrollToFeed">Home</a></li>
         <li><a href="/add_problem">Report Issue</a></li>
         <li><a href="/logout">Logout</a></li>
       </ul>
@@ -34,6 +37,7 @@
       {% block container %}{% endblock %}
     </div>
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <!-- Page-specific JS -->
     {% block scripts %}{% endblock %}
   </body>

@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // AOS ANIMATIONS
+  AOS.init({
+    duration: 700,
+    easing: "ease-out-cubic",
+    once: false, // animate only once
+    offset: 80, // trigger slightly before visible
+  });
+
+  // Theme Toggle
   const toggle = document.getElementById("themeToggle");
 
   // Load saved theme
@@ -13,5 +22,18 @@ document.addEventListener("DOMContentLoaded", () => {
       "theme",
       document.body.classList.contains("dark") ? "dark" : "light"
     );
+  });
+
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    const feedLink = document.getElementById("feedLink");
+    const feedSection = document.getElementById("feed-section");
+
+    if (feedLink && feedSection && window.location.pathname === "/home") {
+      feedLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        feedSection.scrollIntoView({ behavior: "smooth" });
+      });
+    }
   });
 });
