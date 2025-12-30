@@ -101,12 +101,13 @@ body {
   align-items: center;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-links button {
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--navbar-text);
   position: relative;
+  color: var(--navbar-text);
 }
 
 /* Hover underline */
@@ -118,7 +119,7 @@ body {
   width: 0;
   height: 2px;
   background: var(--accent-primary);
-  transition: width 0.2s ease;
+  transition: width 0.5s ease;
 }
 
 .nav-links a:hover::after {
@@ -126,8 +127,87 @@ body {
 }
 
 /* =========================
-   THEME TOGGLE (SVG ICONS)
+   ACCOUNT DROPDOWN
    ========================= */
+
+.account-menu {
+  position: relative;
+}
+
+.account-btn {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Glassmorphic dropdown */
+.account-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  min-width: 180px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  /* light glass */
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2000;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.account-dropdown a {
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.account-dropdown a:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.account-dropdown .logout {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* Show on hover */
+.account-menu:hover .account-dropdown {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.account-dropdown.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dark .account-dropdown {
+  background: rgba(15, 23, 42, 0.6);
+  /* dark glass */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .account-dropdown a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+THEME TOGGLE (SVG ICONS)
+========================= */
 
 .theme-toggle {
   position: relative;
@@ -187,8 +267,8 @@ body {
 }
 
 /* =========================
-   PAGE CONTAINER
-   ========================= */
+PAGE CONTAINER
+========================= */
 .container {
   padding: 120px 64px 64px;
   min-height: 100vh;
@@ -196,8 +276,8 @@ body {
 }
 
 /* =========================
-   BUTTON INTERACTIONS
-   ========================= */
+BUTTON INTERACTIONS
+========================= */
 
 button,
 .btn-primary,
@@ -223,8 +303,8 @@ button:active,
 }
 
 /* =========================
-   THEME TOGGLE MOTION
-   ========================= */
+THEME TOGGLE MOTION
+========================= */
 
 .theme-toggle {
   transition:
@@ -242,8 +322,55 @@ button:active,
 
 
 /* =========================
-   RESPONSIVE
-   ========================= */
+TOAST NOTIFICATIONS
+========================= */
+
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 2000;
+}
+
+.toast {
+  min-width: 260px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: var(--bg-primary);
+  box-shadow: var(--card-shadow);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+
+  /* AOS-like animation */
+  animation: toastFadeUp 0.4s ease-out;
+}
+
+.toast.success {
+  border-left: 4px solid #22c55e;
+}
+
+.toast.error {
+  border-left: 4px solid #ef4444;
+}
+
+@keyframes toastFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+RESPONSIVE
+========================= */
 @media (max-width: 768px) {
   .navbar {
     padding: 0 24px;

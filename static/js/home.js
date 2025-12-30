@@ -1,6 +1,24 @@
+// Show Toast Function
+function showToast(message, type = "success") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerText = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
 /* =========================
      VOTING
      ========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  showToast("Toast system working", "success");
+});
 document.querySelectorAll(".vote-btn").forEach((button) => {
   button.addEventListener("click", () => {
     const problemId = button.dataset.id;
@@ -10,15 +28,19 @@ document.querySelectorAll(".vote-btn").forEach((button) => {
         const data = await res.json();
 
         if (!res.ok) {
-          alert(data.error || "Voting failed");
+          showToast(data.error || "Voting failed", "error");
           return;
         }
 
         button.querySelector("span").innerText = data.votes + " Votes";
         button.classList.add("voted");
         button.disabled = true;
+
+        showToast("Vote counted successfully", "success");
       })
-      .catch(() => alert("Something went wrong. Try again."));
+      .catch(() => {
+        showToast("Something went wrong. Try again.", "error");
+      });
   });
 });
 
@@ -51,9 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       feedSection.scrollIntoView({
         behavior: "smooth",
-        block: "start"
+        block: "start",
       });
     });
   }
 });
-

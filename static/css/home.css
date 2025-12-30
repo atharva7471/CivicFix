@@ -11,6 +11,7 @@ body.home .navbar {
 
 /* White text on hero */
 body.home .navbar .logo,
+body.home .navbar button,
 body.home .navbar a {
   color: var(--always-white);
 }
@@ -23,6 +24,7 @@ body.home .navbar.fixed {
 }
 
 body.home .navbar.fixed .logo,
+body.home .navbar.fixed button,
 body.home .navbar.fixed a {
   color: var(--navbar-text);
 }
@@ -74,8 +76,8 @@ body.home .navbar.fixed a {
 }
 
 /* =========================
-   FEED SECTION
-   ========================= */
+FEED SECTION
+========================= */
 
 body.home .container {
   padding-top: 80px;
@@ -139,6 +141,14 @@ body.home .container {
   object-fit: cover;
 }
 
+/* Hover effect (desktop only) */
+@media (hover: hover) {
+  .problem-card:hover .problem-img {
+    transform: scale(1.04);
+    transition: transform 0.5s ease
+  }
+}
+
 .card-body {
   padding: 20px;
 }
@@ -171,11 +181,6 @@ body.home .container {
   color: var(--accent-secondary);
 }
 
-/* Hover */
-.problem-card:hover {
-  transform: translateY(10px);
-  box-shadow: 0 18px 40px var(nav);
-}
 
 /* =========================
    RESPONSIVE

@@ -3,11 +3,12 @@
 {% block title %}Report Issue - CivicFix{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/add_problem.css') }}">
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/add_problem.css') }}">
 <!-- Leaflet (needed globally if map JS runs conditionally) -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 {% endblock %}
 
 {% block container %}
@@ -15,7 +16,7 @@
     <h2>Report a New Problem</h2>
 
     <form action="/submit" method="POST" enctype="multipart/form-data">
-        <label>Category *</label>
+        <label>Category <span style="color: #ff4d4d;">*</span></label>
         <select name="category" required>
             <option value>-- Select Category --</option>
             <option value="Road / Pothole">Road / Pothole</option>
@@ -27,7 +28,7 @@
             <option value="Other">Other</option>
         </select>
 
-        <label>Description</label>
+        <label>Description <span style="color: #ff4d4d;">*</span></label>
         <textarea name="description" placeholder="Describe the issue..."
             required></textarea>
 
@@ -36,19 +37,19 @@
 
         <div id="ml-feedback" class="hidden">Analyzing image with AI...</div>
 
-        <label>Select Location on Map *</label>
-
-        <label>Search Location</label>
+        <label>Select Location on Map <span style="color: #ff4d4d;">*</span></label>
+        <label style="font-size: small;">Search Location</label>
         <input
             type="text"
             id="location-search"
             placeholder="Search area, landmark, city...">
 
-        <div id="map" style="height: 300px; margin-bottom: 10px;" data-aos="fade-up" data-aos-delay="200" data-aos-once="true"></div>
+        <div id="map" style="height: 300px; margin-bottom: 10px;"
+            data-aos="fade-up" data-aos-delay="200" data-aos-once="true"></div>
 
         <!-- Hidden fields for backend -->
-        <input type="hidden" name="latitude" id="latitude" required>
-        <input type="hidden" name="longitude" id="longitude" required>
+        <input type="hidden" name="latitude" id="latitude">
+        <input type="hidden" name="longitude" id="longitude">
         <input type="hidden" name="area_name" id="area-name-input">
 
         <small>Click on the map to mark the exact location</small>
@@ -59,11 +60,11 @@
         </div>
 
         <div id="area-name" class="area-name"></div>
-
         <button type="submit" class="btn-submit">Post Problem</button>
 
     </form>
 </div>
+<div id="toast-container"></div>
 {% block scripts %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="{{ url_for('static', filename='js/add_problem.js') }}"></script>

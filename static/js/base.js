@@ -9,12 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Theme Toggle
   const toggle = document.getElementById("themeToggle");
-
-  // Load saved theme
   if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark");
   }
-
   toggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
 
@@ -24,16 +21,31 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-  
-  document.addEventListener("DOMContentLoaded", () => {
-    const feedLink = document.getElementById("feedLink");
-    const feedSection = document.getElementById("feed-section");
+  // Fedd connection
+  const feedLink = document.getElementById("feedLink");
+  const feedSection = document.getElementById("feed-section");
 
-    if (feedLink && feedSection && window.location.pathname === "/home") {
-      feedLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        feedSection.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+  if (feedLink && feedSection && window.location.pathname === "/home") {
+    feedLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      feedSection.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+});
+
+//Account DropDown
+document.addEventListener("DOMContentLoaded", () => {
+  const accountBtn = document.querySelector(".account-btn");
+  const dropdown = document.querySelector(".account-dropdown");
+
+  if (!accountBtn || !dropdown) return;
+
+  accountBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle("open");
+  });
+
+  document.addEventListener("click", () => {
+    dropdown.classList.remove("open");
   });
 });

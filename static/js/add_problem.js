@@ -1,3 +1,18 @@
+//Toast Function
+  function showToast(message, type = "error") {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.innerText = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
 /* =========================
      IMAGE PREVIEW / ML FEEDBACK
      ========================= */
@@ -81,3 +96,33 @@ if (mapElement) {
       });
   }
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("form");
+  const latInput = document.getElementById("latitude");
+  const lngInput = document.getElementById("longitude");
+  const mapBox = document.getElementById("map");
+
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    if (!latInput.value || !lngInput.value) {
+      e.preventDefault();
+
+      // Toast message
+      if (typeof showToast === "function") {
+        showToast("Please select a location on the map", "error");
+      } else {
+        alert("Please select a location on the map");
+      }
+
+      // Visual hint
+      mapBox.style.outline = "2px solid #ef4444";
+      mapBox.style.borderRadius = "8px";
+
+      mapBox.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  });
+});

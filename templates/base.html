@@ -17,9 +17,25 @@
     <nav class="navbar" id="navbar" data-aos="fade-down" data-aos-once="false">
       <div class="logo">CivicFix</div>
       <ul class="nav-links">
-        <li><a href="/home" id="scrollToFeed">Home</a></li>
+        <li><a href="/home">Home</a></li>
         <li><a href="/add_problem">Report Issue</a></li>
-        <li><a href="/logout">Logout</a></li>
+        {% if session.get("user_id") %}
+        <!-- Logged in -->
+        <li class="account-menu">
+          <button class="account-btn">
+            Account
+          </button>
+          <div class="account-dropdown">
+            <a href="/profile">Profile - {{ session.get("user_name", "Account") }}</a>
+            <a href="/my_issues">My Issues</a>
+            <a href="/logout" class="logout">Logout</a>
+          </div>
+        </li>
+        {% else %}
+        <!-- Not logged in -->
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+        {% endif %}
       </ul>
       <button class="theme-toggle" id="themeToggle"
         aria-label="Toggle theme">

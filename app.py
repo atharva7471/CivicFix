@@ -46,7 +46,9 @@ def submit_problem():
     longitude = float(request.form.get("longitude"))
     area_name = request.form.get("area_name") 
     image = request.files.get("image")
-
+    # ✅ Verification for latitude & longitude
+    if not latitude or not longitude:
+        return jsonify({"error": "Location is required"}), 400
     filename = None
     if image and image.filename != "":
         filename = secure_filename(image.filename)
