@@ -15,18 +15,18 @@
     <body class="home">
         <!-- NAVBAR (single navbar) -->
         <nav class="navbar" id="navbar" data-aos="fade-down">
-            <div class="logo">CivicFix</div>
+            <a href="{{ url_for('home') }}">CivicFix</a>
             <ul class="nav-links">
-                <li><a href="/home">Home</a></li>
+                <li><a href="#feed">Feed</a></li>
                 <li><a href="/add_problem">Report Issue</a></li>
                 {% if session.get("user_id") %}
                 <!-- Logged in -->
                 <li class="account-menu">
                     <button class="account-btn">
-                        Account
+                        Profile
                     </button>
                     <div class="account-dropdown">
-                        <a href="/profile">Profile - {{ session.get("user_name",
+                        <a href="/profile">👤{{ session.get("user_name",
                             "Account") }}</a>
                         <a href="/my_issues">My Issues</a>
                         <a href="/logout" class="logout">Logout</a>
@@ -37,18 +37,18 @@
                 <li><a href="/login">Login</a></li>
                 <li><a href="/register">Register</a></li>
                 {% endif %}
+                <button class="theme-toggle" id="themeToggle"
+                    aria-label="Toggle theme">
+                    <img
+                        src="{{ url_for('static', filename='images/moon.svg') }}"
+                        alt="Dark mode"
+                        class="theme-icon moon-icon">
+                    <img
+                        src="{{ url_for('static', filename='images/sun.svg') }}"
+                        alt="Light mode"
+                        class="theme-icon sun-icon">
+                </button>
             </ul>
-            <button class="theme-toggle" id="themeToggle"
-                aria-label="Toggle theme">
-                <img
-                    src="{{ url_for('static', filename='images/sun.svg') }}"
-                    alt="Light mode"
-                    class="theme-icon sun-icon">
-                <img
-                    src="{{ url_for('static', filename='images/moon.svg') }}"
-                    alt="Dark mode"
-                    class="theme-icon moon-icon">
-            </button>
         </nav>
 
         <!-- HERO -->
@@ -57,15 +57,22 @@
             <div class="hero-content" data-aos="fade-up">
                 <h1>Report Civic Issues</h1>
                 <p>Make problems visible in your local area</p>
-                <a href="/add_problem" class="btn-primary">Report an
-                    Issue</a>
+                {% if session.get("user_id") %}
+                <a href="{{ url_for('add_problem') }}"
+                    class="btn-primary">Report an Issue</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn-primary">Login to
+                    Report</a>
+                {% endif %}
             </div>
         </header>
-        <section id="feed-section"><section id="feed-section"></section>
-            <div class="container">
-                <div class="feed-header" data-aos="fade-up"
-                    data-aos-once="true">
+        <section id="feed-section">
+            <div class="container" id="feed">
+                <div class="feed-header" data-aos="fade-up">
                     <h1>Problems in Your Area</h1>
+                    {% if not session.get("user_id") %}
+                    <p class="guest-hint">Login to vote or report issues.</p>
+                    {% endif %}
                 </div>
 
                 <div class="feed-container">

@@ -22,6 +22,7 @@
   /* Borders & shadows */
   --border-light: #e5e7eb;
   --navbar-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 
   /* Navbar */
   --navbar-bg: #ffffff;
@@ -44,6 +45,7 @@
   --navbar-bg: #0b0f19;
   --navbar-text: #e5e7eb;
   --navbar-shadow: 0 10px 28px rgba(0, 0, 0, 0.85);
+  --card-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
 }
 
 html {
@@ -57,10 +59,10 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Poppins", system-ui, sans-serif;
 }
 
 body {
-  font-family: "Poppins", system-ui, sans-serif;
   background: var(--bg-body);
   color: var(--text-primary);
   line-height: 1.5;
@@ -75,11 +77,9 @@ body {
   left: 0;
   width: 100%;
   height: 68px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 0 64px;
   background: var(--navbar-bg);
   box-shadow: var(--navbar-shadow);
@@ -87,7 +87,9 @@ body {
 }
 
 /* Logo */
-.logo {
+.navbar a {
+  list-style: none;
+  text-decoration: none;
   font-size: 1.25rem;
   font-weight: 600;
   color: var(--navbar-text);
@@ -119,7 +121,7 @@ body {
   width: 0;
   height: 2px;
   background: var(--accent-primary);
-  transition: width 0.5s ease;
+  transition: width 0.7s ease;
 }
 
 .nav-links a:hover::after {
@@ -137,7 +139,6 @@ body {
 .account-btn {
   background: none;
   border: none;
-  font: inherit;
   cursor: pointer;
   font-weight: 500;
 }
@@ -150,19 +151,24 @@ body {
   min-width: 180px;
   padding: 8px;
   background: rgba(255, 255, 255, 0.15);
-  /* light glass */
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 14px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   display: none;
   flex-direction: column;
   gap: 4px;
-  z-index: 2000;
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 2000;
+}
+
+.account-menu:hover .account-dropdown,
+.account-dropdown.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .account-dropdown a {
@@ -170,29 +176,11 @@ body {
   font-size: 0.9rem;
   text-decoration: none;
   border-radius: 10px;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.account-dropdown a:hover {
-  background: rgba(255, 255, 255, 0.25);
 }
 
 .account-dropdown .logout {
   color: #ef4444;
   font-weight: 500;
-}
-
-/* Show on hover */
-.account-menu:hover .account-dropdown {
-  display: flex;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.account-dropdown.open {
-  display: flex;
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .dark .account-dropdown {
@@ -201,34 +189,28 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.dark .account-dropdown a:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
 /* =========================
 THEME TOGGLE (SVG ICONS)
 ========================= */
-
 .theme-toggle {
-  position: relative;
-  width: 42px;
-  height: 42px;
-
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: transparent;
-  border: 1px solid var(--border-light);
-  border-radius: 50%;
-
-  cursor: pointer;
-  transition: background 0.2s ease, border 0.2s ease;
+  transition: transform 0.25s ease, background 0.25s ease;
 }
 
-/* Hover */
 .theme-toggle:hover {
-  background: rgba(0, 0, 0, 0.04);
+  transform: rotate(12deg) scale(1.05);
+}
+
+.dark .theme-toggle:hover {
+  transform: rotate(-12deg) scale(1.05);
 }
 
 /* Icons */
@@ -239,32 +221,11 @@ THEME TOGGLE (SVG ICONS)
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-/* Default (Light mode) */
-.sun-icon {
-  opacity: 1;
-  transform: scale(1);
-}
+.sun-icon { opacity: 0; }
+.moon-icon { opacity: 1; }
 
-.moon-icon {
-  opacity: 0;
-  transform: scale(0.8);
-}
-
-/* Dark mode */
-.dark .sun-icon {
-  opacity: 0;
-  transform: scale(0.8);
-}
-
-.dark .moon-icon {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Dark hover */
-.dark .theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.06);
-}
+.dark .sun-icon { opacity: 1; }
+.dark .moon-icon { opacity: 0; }
 
 /* =========================
 PAGE CONTAINER
@@ -276,55 +237,8 @@ PAGE CONTAINER
 }
 
 /* =========================
-BUTTON INTERACTIONS
-========================= */
-
-button,
-.btn-primary,
-.btn-submit {
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    background-color 0.2s ease;
-}
-
-button:hover,
-.btn-primary:hover,
-.btn-submit:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-
-button:active,
-.btn-primary:active,
-.btn-submit:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-/* =========================
-THEME TOGGLE MOTION
-========================= */
-
-.theme-toggle {
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease;
-}
-
-.theme-toggle:hover {
-  transform: rotate(12deg) scale(1.05);
-}
-
-.dark .theme-toggle:hover {
-  transform: rotate(-12deg) scale(1.05);
-}
-
-
-/* =========================
-TOAST NOTIFICATIONS
-========================= */
-
+   TOASTS
+   ========================= */
 #toast-container {
   position: fixed;
   bottom: 24px;
@@ -342,30 +256,15 @@ TOAST NOTIFICATIONS
   background: var(--bg-primary);
   box-shadow: var(--card-shadow);
   font-size: 0.9rem;
-  color: var(--text-primary);
-
-  /* AOS-like animation */
-  animation: toastFadeUp 0.4s ease-out;
 }
 
-.toast.success {
-  border-left: 4px solid #22c55e;
-}
+.toast.success { border-left: 4px solid #22c55e; }
+.toast.error { border-left: 4px solid #ef4444; }
 
-.toast.error {
-  border-left: 4px solid #ef4444;
-}
-
-@keyframes toastFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.vote-btn.voted {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 /* =========================

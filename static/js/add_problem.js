@@ -1,40 +1,10 @@
-//Toast Function
-  function showToast(message, type = "error") {
-    const container = document.getElementById("toast-container");
-    if (!container) return;
-
-    const toast = document.createElement("div");
-    toast.className = `toast ${type}`;
-    toast.innerText = message;
-
-    container.appendChild(toast);
-
-    setTimeout(() => {
-      toast.remove();
-    }, 3000);
-  }
-/* =========================
-     IMAGE PREVIEW / ML FEEDBACK
-     ========================= */
-const imageInput = document.getElementById("imageInput");
-if (imageInput) {
-  imageInput.addEventListener("change", () => {
-    const file = imageInput.files[0];
-    if (file) {
-      const mlFeedback = document.getElementById("ml-feedback");
-      if (mlFeedback) {
-        mlFeedback.classList.remove("hidden");
-        mlFeedback.innerText = "Analyzing image with AI...";
-      }
-    }
-  });
-}
-
-/* =========================
+document.addEventListener("DOMContentLoaded", () => {
+  /* =========================
      MAP (ADD PROBLEM ONLY)
      ========================= */
-const mapElement = document.getElementById("map");
-if (mapElement) {
+  const mapElement = document.getElementById("map");
+  if (!mapElement || typeof L === "undefined") return;
+
   const map = L.map("map").setView([19.076, 72.8777], 12);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -59,25 +29,46 @@ if (mapElement) {
 
   map.on("click", (e) => setMarker(e.latlng.lat, e.latlng.lng));
 
+  /* =========================
+     LOCATION SEARCH
+     ========================= */
   const searchInput = document.getElementById("location-search");
+
   if (searchInput) {
-    searchInput.addEventListener("keydown", function (e) {
+    searchInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        searchLocation(searchInput.value);
+        searchLocation(searchInput.value.trim());
       }
     });
   }
 
   function searchLocation(query) {
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+    if (!query) return;
+
+    fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+        query
+      )}`
+    )
       .then((res) => res.json())
       .then((data) => {
-        if (!data.length) return alert("Location not found");
+        if (!data.length) {
+          if (typeof showToast === "function") {
+            showToast("Location not found", "error");
+          }
+          return;
+        }
+
         const lat = parseFloat(data[0].lat);
         const lng = parseFloat(data[0].lon);
         map.setView([lat, lng], 15);
         setMarker(lat, lng);
+      })
+      .catch(() => {
+        if (typeof showToast === "function") {
+          showToast("Error searching location", "error");
+        }
       });
   }
 
@@ -95,33 +86,34 @@ if (mapElement) {
         }
       });
   }
-}
-document.addEventListener("DOMContentLoaded", () => {
+
+  /* =========================
+     FORM VALIDATION
+     ========================= */
   const form = document.querySelector("form");
   const latInput = document.getElementById("latitude");
   const lngInput = document.getElementById("longitude");
   const mapBox = document.getElementById("map");
 
   if (!form) return;
+  const isAuthenticated = form.dataset.auth === "true";
 
   form.addEventListener("submit", (e) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      showToast("Login to submit an issue", "error");
+      return;
+    }
+
     if (!latInput.value || !lngInput.value) {
       e.preventDefault();
 
-      // Toast message
-      if (typeof showToast === "function") {
-        showToast("Please select a location on the map", "error");
-      } else {
-        alert("Please select a location on the map");
-      }
+      showToast("Please select a location on the map", "error");
 
-      // Visual hint
-      mapBox.style.outline = "2px solid #ef4444";
-      mapBox.style.borderRadius = "8px";
-
+      mapBox.classList.add("map-error");
       mapBox.scrollIntoView({
         behavior: "smooth",
-        block: "center"
+        block: "center",
       });
     }
   });

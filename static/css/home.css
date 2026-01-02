@@ -7,13 +7,18 @@ body.home .navbar {
   top: 0;
   background: transparent;
   box-shadow: none;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 
 /* White text on hero */
-body.home .navbar .logo,
 body.home .navbar button,
 body.home .navbar a {
   color: var(--always-white);
+}
+
+body.home .navbar .logout {
+  color: #ef4444;
+  font-weight: 500;
 }
 
 /* Solid navbar after scroll */
@@ -27,6 +32,11 @@ body.home .navbar.fixed .logo,
 body.home .navbar.fixed button,
 body.home .navbar.fixed a {
   color: var(--navbar-text);
+}
+
+body.home .navbar.fixed .logout {
+  color: #ef4444;
+  font-weight: 500;
 }
 
 /* =========================
@@ -54,7 +64,6 @@ body.home .navbar.fixed a {
 .hero-content h1 {
   font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 12px;
   color: var(--always-white);
 }
 
@@ -72,7 +81,6 @@ body.home .navbar.fixed a {
   border-radius: 10px;
   font-weight: 600;
   text-decoration: none;
-  display: inline-block;
 }
 
 /* =========================
@@ -86,9 +94,18 @@ body.home .container {
       var(--bg-primary) 100%);
 }
 
+.feed-header {
+  margin-bottom: 36px;
+}
+
 .feed-header h1 {
   font-size: 1.8rem;
-  margin-bottom: 36px;
+}
+
+.guest-hint,
+.empty-state {
+  font-size: 0.85rem;
+  color: var(--text-muted);
 }
 
 /* Grid */
@@ -106,7 +123,7 @@ body.home .container {
   background: var(--card-bg);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: var(--navbar-shadow);
+  box-shadow: var(--card-shadow);
   display: flex;
   flex-direction: column;
 }
@@ -124,7 +141,6 @@ body.home .container {
   font-size: 0.75rem;
   padding: 4px 12px;
   border-radius: 20px;
-  font-weight: 500;
 }
 
 .status-badge {
@@ -139,15 +155,24 @@ body.home .container {
   width: 100%;
   height: 180px;
   object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
 /* Hover effect (desktop only) */
 @media (hover: hover) {
   .problem-card:hover .problem-img {
     transform: scale(1.04);
-    transition: transform 0.5s ease
+  }
+  .problem-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .problem-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
   }
 }
+
 
 .card-body {
   padding: 20px;

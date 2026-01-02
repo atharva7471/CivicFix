@@ -4,13 +4,14 @@ from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from urllib.parse import quote_plus
+from functools import wraps
 from datetime import datetime
 from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
 load_dotenv()
-app.secret_key = os.getenv("app.secret_key")
+app.secret_key = os.getenv("app_secret_key")
 
 # MongoDB storage
 MONGO_URI = os.getenv("MONGO_URI")
@@ -28,6 +29,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 #--------------------- All Routes here --------------------------#
 @app.route("/")
 @app.route("/home")
+
 def home():
     problems = list(
         problems_collection.find().sort("created_at", -1)
@@ -153,9 +155,6 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
-
-def login_required():
-    return "user_id" in session
 
 if __name__ == "__main__":
     app.run(debug=True)
