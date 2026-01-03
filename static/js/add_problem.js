@@ -117,4 +117,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+  const humanCheck = document.getElementById("humanCheck");
+
+  form.addEventListener("submit", (e) => {
+    if (!humanCheck.checked) {
+      e.preventDefault();
+      showToast("Please confirm the verification checkbox", "error");
+      return;
+    }
+
+    // existing map validation below
+  });
 });

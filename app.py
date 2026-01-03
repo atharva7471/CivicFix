@@ -11,7 +11,7 @@ import os
 
 app = Flask(__name__)
 load_dotenv()
-app.secret_key = os.getenv("app_secret_key")
+app.secret_key = os.getenv("APP_SECRET_KEY")
 
 # MongoDB storage
 MONGO_URI = os.getenv("MONGO_URI")
@@ -34,7 +34,11 @@ def home():
     problems = list(
         problems_collection.find().sort("created_at", -1)
     )
-    return render_template("home.html", problems=problems)
+    return render_template(
+        "home.html",
+        problems=problems,
+        admin_email=os.getenv("ADMIN_EMAIL")
+    )
 
 @app.route("/add_problem")
 def add_problem():
@@ -42,6 +46,8 @@ def add_problem():
 
 @app.route("/submit", methods=["POST"])
 def submit_problem():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
     category = request.form.get("category")
     description = request.form.get("description")
     latitude = float(request.form.get("latitude"))
@@ -68,6 +74,8 @@ def submit_problem():
         "image": f"uploads/{filename}" if filename else None,
         "status": "pending",
         "votes": 0,
+        "is_verified": True, 
+        "user_id": ObjectId(session["user_id"]), # 🔥 ownership
         "created_at": datetime.utcnow(),
     }
     problems_collection.insert_one(problem)
@@ -102,12 +110,51 @@ def vote(problem_id):
         {"_id": ObjectId(problem_id)},
         {"$inc": {"votes": 1}}
     )
+        
+    problem = problems_collection.find_one({"_id": problem.obj_id})
 
-    updated_problem = problems_collection.find_one(
-        {"_id": ObjectId(problem_id)}
+    # 🔥 AUTO-VERIFY AFTER 5 VOTES
+    if problem["votes"] >= 5 and not problem.get("is_verified"):
+        problems_collection.update_one(
+            {"_id": problem.obj_id},
+            {"$set": {"is_verified": True}}
+        )
+    return jsonify({"votes": problem["votes"]})
+
+@app.route("/my_issues")
+def my_issues():
+    user_id = ObjectId(session["user_id"])
+
+    issues = list(
+        problems_collection.find(
+            {"user_id": user_id}
+        ).sort("created_at", -1)
+    )
+    return render_template(
+        "my_issues.html",
+        issues=issues,
+        admin_email=os.getenv("ADMIN_EMAIL")
+    )  
+
+@app.route("/update_status/<issue_id>", methods=["POST"])
+def update_status(issue_id):
+    user = users_collection.find_one(
+        {"_id": ObjectId(session["user_id"])}
+    )
+    if user["email"] != os.getenv("ADMIN_EMAIL"):
+        return "Unauthorized", 403
+
+    new_status = request.form.get("status")
+
+    if new_status not in ["Pending", "Acknowledged", "Resolved"]:
+        return "Invalid status", 400
+
+    problems_collection.update_one(
+        {"_id": ObjectId(issue_id)},
+        {"$set": {"status": new_status}}
     )
 
-    return jsonify({"votes": updated_problem["votes"]})
+    return redirect(request.referrer)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -142,13 +189,14 @@ def login():
         user = users_collection.find_one({"email": email})
 
         if not user or not check_password_hash(user["password"], password):
-            return "Invalid credentials"
+            return render_template("login.html", error="Invalid credentials")
 
         # Store user session
         session["user_id"] = str(user["_id"])
         session["user_name"] = user["name"]
-
-        return redirect(url_for("home"))
+        session["user_email"] = user["email"]
+        next_page = request.args.get("next")
+        return redirect(next_page or url_for("home"))
     return render_template("login.html")
 
 @app.route("/logout")

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}My Issues - CivicFix{% endblock %}
+
+{% block head %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block container %}
+<h2 style="margin-bottom: 24px;">My Reported Issues</h2>
+
+{% if issues|length == 0 %}
+<p class="empty-state">You haven’t reported any issues yet.</p>
+{% endif %}
+
+<div class="feed-container">
+    {% for issue in issues %}
+    <div class="problem-card">
+
+        <div class="card-header">
+            <span class="category-tag">{{ issue.category }}</span>
+
+            <span class="status-badge status-{{ issue.status|lower }}">
+                {{ issue.status }}
+            </span>
+            {% if issue.is_verified %}
+            <span class="verified-badge">✔ Verified</span>
+            {% endif %}
+        </div>
+
+        {% if issue.image %}
+        <img src="{{ url_for('static', filename=issue.image) }}"
+            class="problem-img">
+        {% endif %}
+
+        <div class="card-body">
+            <p>{{ issue.description }}</p>
+            <small>📍 {{ issue.location.area_name }}</small>
+        </div>
+
+        <div class="card-footer">
+            <span>{{ issue.votes }} votes</span>
+            <small>{{ issue.created_at.strftime("%d %b %Y") }}</small>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

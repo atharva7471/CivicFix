@@ -52,7 +52,6 @@
         </nav>
 
         <!-- HERO -->
-
         <header class="hero">
             <div class="hero-content" data-aos="fade-up">
                 <h1>Report Civic Issues</h1>
@@ -76,28 +75,63 @@
                 </div>
 
                 <div class="feed-container">
+
                     {% if problems|length == 0 %}
-                    <p style="text-align:center;">No problems reported yet.</p>
+                    <p class="empty-state">No problems reported yet.</p>
                     {% endif %}
 
                     {% for problem in problems %}
-                    <div class="problem-card" data-aos="fade-up"
+                    <div class="problem-card"
+                        data-aos="fade-up"
                         data-aos-delay="{{ loop.index0 * 100 }}"
                         data-aos-once="true">
+
+                        <!-- CARD HEADER -->
                         <div class="card-header">
                             <span class="category-tag">{{ problem.category
                                 }}</span>
-                            <span class="status-badge pending">
-                                {{ problem.status|capitalize }}
+
+                            <span
+                                class="status-badge status-{{ problem.status|lower }}">
+                                {{ problem.status }}
                             </span>
+
+                            {% if problem.is_verified %}
+                            <span class="verified-badge">✔ Verified</span>
+                            {% endif %}
                         </div>
 
+                        <!-- ADMIN STATUS UPDATE -->
+                        {% if session.get("user_email") == admin_email %}
+                        <form class="admin-status-form"
+                            method="POST"
+                            action="/update_status/{{ problem._id }}">
+                            <select name="status">
+                                <option {% if problem.status == "Pending"
+                                    %}selected{% endif %}>
+                                    Pending
+                                </option>
+                                <option {% if problem.status == "Acknowledged"
+                                    %}selected{% endif %}>
+                                    Acknowledged
+                                </option>
+                                <option {% if problem.status == "Resolved"
+                                    %}selected{% endif %}>
+                                    Resolved
+                                </option>
+                            </select>
+                            <button type="submit" >Update</button>
+                        </form>
+                        {% endif %}
+
+                        <!-- IMAGE -->
                         {% if problem.image %}
                         <img
                             src="{{ url_for('static', filename=problem.image) }}"
                             class="problem-img">
                         {% endif %}
 
+                        <!-- BODY -->
                         <div class="card-body">
                             <p class="description">{{ problem.description }}</p>
                             <div class="location-info">
@@ -105,12 +139,14 @@
                             </div>
                         </div>
 
+                        <!-- FOOTER -->
                         <div class="card-footer">
                             <button class="vote-btn"
                                 data-id="{{ problem._id }}">
                                 ▲ <span>{{ problem.votes }} Votes</span>
                             </button>
-                            <button class="share-btn">Share</button>
+                            <button class="share-btn">
+                                Share</button>
                         </div>
                     </div>
                     {% endfor %}
