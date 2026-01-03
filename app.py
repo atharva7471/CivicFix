@@ -26,19 +26,50 @@ votes_collection = db["votes"]
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+CATEGORY_WEIGHTS = {
+    "Road / Pothole": 3,
+    "Garbage": 4,
+    "Water Supply": 5,
+    "Drainage": 5,
+    "Electricity": 4,
+    "Public Safety": 6,
+    "Other": 4
+}
+
+def calculate_priority(problem):
+    votes_score = problem.get("votes", 0) * 2
+    days_pending = (datetime.utcnow() - problem["created_at"]).days
+    category_score = CATEGORY_WEIGHTS.get(problem.get("category"), 1)
+    verification_bonus = 5 if problem.get("is_verified") else 0
+
+    return votes_score + days_pending + category_score + verification_bonus
+
+
 #--------------------- All Routes here --------------------------#
 @app.route("/")
 @app.route("/home")
-
 def home():
     problems = list(
         problems_collection.find().sort("created_at", -1)
     )
+
+    for problem in problems:
+        problem["priority_score"] = calculate_priority(problem)
+
+    # 🔥 SORT BY PRIORITY (DESC)
+    problems.sort(key=lambda x: x["priority_score"], reverse=True)
+    
+    # 🔥 Mark top 5
+    top_ids = set(p["_id"] for p in problems[:5])
+    for problem in problems:
+        problem["is_top_priority"] = problem["_id"] in top_ids
+
     return render_template(
         "home.html",
         problems=problems,
         admin_email=os.getenv("ADMIN_EMAIL")
     )
+
 
 @app.route("/add_problem")
 def add_problem():
@@ -121,6 +152,36 @@ def vote(problem_id):
         )
     return jsonify({"votes": problem["votes"]})
 
+@app.route("/export/<problem_id>")
+def export_issue(problem_id):
+    problem = problems_collection.find_one(
+        {"_id": ObjectId(problem_id)}
+    )
+
+    if not problem:
+        return "Issue not found", 404
+
+    # Recalculate priority
+    problem["priority_score"] = calculate_priority(problem)
+
+    # Get top 5 IDs again (backend truth)
+    problems = list(problems_collection.find())
+    for p in problems:
+        p["priority_score"] = calculate_priority(p)
+
+    problems.sort(key=lambda x: x["priority_score"], reverse=True)
+    top_ids = set(p["_id"] for p in problems[:5])
+
+    # 🔒 HARD CHECK
+    if not problem.get("is_verified") or problem["_id"] not in top_ids:
+        return "Export not allowed for this issue", 403
+
+    return render_template(
+        "export_issue.html",
+        problem=problem,
+        priority_score=problem["priority_score"]
+    )
+
 @app.route("/my_issues")
 def my_issues():
     user_id = ObjectId(session["user_id"])
@@ -130,6 +191,12 @@ def my_issues():
             {"user_id": user_id}
         ).sort("created_at", -1)
     )
+    for issue in issues:
+        issue["priority_score"] = calculate_priority(issue)
+
+    # 🔥 SORT BY PRIORITY (DESC)
+    issues.sort(key=lambda x: x["priority_score"], reverse=True)
+    
     return render_template(
         "my_issues.html",
         issues=issues,

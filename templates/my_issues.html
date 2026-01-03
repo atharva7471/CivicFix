@@ -24,9 +24,14 @@
             <span class="status-badge status-{{ issue.status|lower }}">
                 {{ issue.status }}
             </span>
-            {% if issue.is_verified %}
-            <span class="verified-badge">✔ Verified</span>
-            {% endif %}
+            <span>
+                {% if issue.is_verified %}
+                <span class="verified-badge">✔ Verified</span>
+                {% endif %}
+            </span>
+            <span class="priority-badge">
+                🔥 Priority {{ issue.priority_score }}
+            </span>
         </div>
 
         {% if issue.image %}
@@ -43,7 +48,6 @@
             <span>{{ issue.votes }} votes</span>
             <small>{{ issue.created_at.strftime("%d %b %Y") }}</small>
         </div>
-
     </div>
     {% endfor %}
 </div>

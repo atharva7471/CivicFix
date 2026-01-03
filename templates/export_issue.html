@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Civic Complaint – CivicFix</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 40px;
+      line-height: 1.6;
+      color: #111827;
+      background: #ffffff;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #374151;
+      margin-bottom: 24px;
+    }
+
+    .section {
+      margin-bottom: 18px;
+    }
+
+    .label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .verified {
+      background: #ecfdf5;
+      color: #16a34a;
+    }
+
+    .priority {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    hr {
+      margin: 28px 0;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+
+    /* ACTION BUTTONS */
+    .actions {
+      margin-bottom: 30px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .btn-edit {
+      background: #e0e7ff;
+      color: #3730a3;
+    }
+
+    .btn-pdf {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .edit-mode {
+      outline: 2px dashed #6366f1;
+      padding: 6px;
+      border-radius: 6px;
+    }
+
+    /* Hide buttons in print/PDF */
+    @media print {
+      .actions {
+        display: none;
+      }
+    }
+  </style>
+    </head>
+
+    <body>
+
+        <!-- ACTION BAR -->
+        <div class="actions">
+            <button class="btn btn-edit" onclick="toggleEdit()">
+                ✏️ Edit Complaint
+            </button>
+            <button class="btn btn-pdf" onclick="savePDF()">
+                📄 Save as PDF
+            </button>
+        </div>
+
+        <!-- CONTENT (EDITABLE AREA) -->
+        <div id="complaintContent">
+
+            <h2 contenteditable="false">
+                Subject: Civic Issue Complaint – {{ problem.category }}
+            </h2>
+
+            <p class="subtitle" contenteditable="false">
+                Submitted via CivicFix – Community Civic Reporting Platform
+            </p>
+
+            <div class="section">
+                <span class="badge verified">✔ Verified Issue</span>
+                <span class="badge priority">🔥 Top Priority</span>
+            </div>
+
+            <div class="section edit-target">
+                <span class="label">Issue Description</span>
+                <p>{{ problem.description }}</p>
+            </div>
+
+            <div class="section edit-target">
+                <span class="label">Location</span>
+                <p>{{ problem.location.area_name }}</p>
+            </div>
+
+            <div class="section">
+                <span class="label">Reported On</span>
+                {{ problem.created_at.strftime("%d %B %Y") }}
+            </div>
+
+            <div class="section">
+                <span class="label">Community Support</span>
+                {{ problem.votes }} citizens have supported this issue
+            </div>
+
+            <div class="section">
+                <span class="label">Priority Score</span>
+                {{ priority_score }}
+            </div>
+
+            <hr>
+
+            <div class="section edit-target">
+                <p>
+                    This issue has been reported and verified by multiple
+                    citizens using
+                    CivicFix, a community-driven platform that improves civic
+                    visibility
+                    and accountability.
+                </p>
+
+                <p>
+                    Given the urgency and public impact, we kindly request the
+                    concerned
+                    authority to review this issue and take appropriate action.
+                </p>
+            </div>
+
+            <div class="footer edit-target">
+                Sincerely,<br>
+                Concerned Citizens<br>
+                (via CivicFix)
+            </div>
+
+        </div>
+
+        <script>
+    let isEditing = false;
+
+    function toggleEdit() {
+      isEditing = !isEditing;
+
+      document.querySelectorAll(".edit-target").forEach(el => {
+        el.contentEditable = isEditing;
+        el.classList.toggle("edit-mode", isEditing);
+      });
+    }
+
+    function savePDF() {
+      window.print();
+    }
+  </script>
+
+    </body>
+</html>

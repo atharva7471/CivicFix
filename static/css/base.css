@@ -320,3 +320,12 @@ RESPONSIVE
   padding: 4px 10px;
   border-radius: 999px;
 }
+
+.priority-badge {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #fef3c7;
+  color: #92400e;
+  font-weight: 600;
+}
