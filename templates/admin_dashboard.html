@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard – CivicFix{% endblock %}
+{% block head %}
+<link rel="stylesheet"
+            href="{{ url_for('static', filename='css/admin_dashboard.css') }}">
+{% endblock %}
+{% block container %}
+<h2 style="margin-bottom: 24px;">📊 Admin Analytics Dashboard</h2>
+
+<!-- SUMMARY CARDS -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3>{{ total_issues }}</h3>
+    <p>Total Issues</p>
+  </div>
+
+  <div class="stat-card success">
+    <h3>{{ resolved_issues }}</h3>
+    <p>Resolved</p>
+  </div>
+
+  <div class="stat-card warning">
+    <h3>{{ in_progress_issues }}</h3>
+    <p>In Progress</p>
+  </div>
+
+  <div class="stat-card danger">
+    <h3>{{ pending_issues }}</h3>
+    <p>Pending</p>
+  </div>
+</div>
+
+<!-- CATEGORY STATS -->
+<h3 style="margin-top: 40px;">📌 Issues by Category</h3>
+<ul class="stats-list">
+  {% for cat in category_stats %}
+  <li>
+    <strong>{{ cat._id }}</strong>
+    <span>{{ cat.count }}</span>
+  </li>
+  {% endfor %}
+</ul>
+
+<!-- AREA STATS -->
+<h3 style="margin-top: 40px;">📍 Most Affected Areas</h3>
+<ul class="stats-list">
+  {% for area in area_stats %}
+  <li>
+    <strong>{{ area._id }}</strong>
+    <span>{{ area.count }}</span>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

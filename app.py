@@ -271,5 +271,41 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
+@app.route("/admin/dashboard")
+def admin_dashboard():
+
+    # 🔒 Admin check
+    if session.get("user_email") != os.getenv("ADMIN_EMAIL"):
+        return "Unauthorized", 403
+
+    total_issues = problems_collection.count_documents({})
+    resolved_issues = problems_collection.count_documents({"status": "Resolved"})
+    pending_issues = problems_collection.count_documents({"status": "Pending"})
+    in_progress_issues = problems_collection.count_documents({"status": "Acknowledged"})
+
+    # Category-wise count
+    category_stats = list(problems_collection.aggregate([
+        {"$group": {"_id": "$category", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}}
+    ]))
+
+    # Area-wise count (top 5)
+    area_stats = list(problems_collection.aggregate([
+        {"$group": {"_id": "$location.area_name", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+        {"$limit": 5}
+    ]))
+
+    return render_template(
+        "admin_dashboard.html",
+        total_issues=total_issues,
+        resolved_issues=resolved_issues,
+        pending_issues=pending_issues,
+        in_progress_issues=in_progress_issues,
+        category_stats=category_stats,
+        area_stats=area_stats
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True)

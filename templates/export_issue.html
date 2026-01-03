@@ -1,203 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Civic Complaint – CivicFix</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="UTF-8">
+    <title>Civic Complaint – CivicFix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      padding: 40px;
-      line-height: 1.6;
-      color: #111827;
-      background: #ffffff;
-    }
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            padding: 50px;
+            line-height: 1.6;
+            color: #1f2937;
+            background: #f9fafb;
+        }
 
-    h2 {
-      margin-bottom: 10px;
-    }
+        /* Paper-like container */
+        .page-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 60px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
 
-    .subtitle {
-      color: #374151;
-      margin-bottom: 24px;
-    }
+        /* Metadata/Header styles */
+        .letter-header {
+            margin-bottom: 40px;
+        }
 
-    .section {
-      margin-bottom: 18px;
-    }
+        .date-line {
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
 
-    .label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 4px;
-    }
+        .recipient-block {
+            margin-bottom: 30px;
+        }
 
-    .badge {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-right: 8px;
-    }
+        h2 {
+            font-size: 1.25rem;
+            text-decoration: underline;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #000;
+        }
 
-    .verified {
-      background: #ecfdf5;
-      color: #16a34a;
-    }
+        .subtitle {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
 
-    .priority {
-      background: #fef3c7;
-      color: #92400e;
-    }
+        .section {
+            margin-bottom: 20px;
+        }
 
-    hr {
-      margin: 28px 0;
-    }
+        .label {
+            font-weight: bold;
+            display: block;
+            font-size: 0.9rem;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
 
-    .footer {
-      margin-top: 40px;
-      font-size: 0.9rem;
-      color: #374151;
-    }
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-right: 8px;
+            border: 1px solid transparent;
+        }
 
-    /* ACTION BUTTONS */
-    .actions {
-      margin-bottom: 30px;
-      display: flex;
-      gap: 12px;
-    }
+        .verified { background: #ecfdf5; color: #065f46; border-color: #a7f3d0; }
+        .priority { background: #fffbeb; color: #92400e; border-color: #fde68a; }
 
-    .btn {
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
+        hr {
+            border: 0;
+            border-top: 1px solid #e5e7eb;
+            margin: 30px 0;
+        }
 
-    .btn-edit {
-      background: #e0e7ff;
-      color: #3730a3;
-    }
+        .footer-signature {
+            margin-top: 50px;
+        }
 
-    .btn-pdf {
-      background: #dcfce7;
-      color: #166534;
-    }
+        /* UI Elements */
+        .actions {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            gap: 12px;
+        }
 
-    .edit-mode {
-      outline: 2px dashed #6366f1;
-      padding: 6px;
-      border-radius: 6px;
-    }
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
 
-    /* Hide buttons in print/PDF */
-    @media print {
-      .actions {
-        display: none;
-      }
-    }
-  </style>
-    </head>
+        .btn-edit { background: #6366f1; color: white; }
+        .btn-edit:hover { background: #4f46e5; }
+        .btn-pdf { background: #10b981; color: white; }
+        .btn-pdf:hover { background: #059669; }
 
-    <body>
+        .edit-mode {
+            outline: 2px solid #6366f1;
+            background-color: #f5f3ff;
+            padding: 10px;
+        }
 
-        <!-- ACTION BAR -->
-        <div class="actions">
-            <button class="btn btn-edit" onclick="toggleEdit()">
-                ✏️ Edit Complaint
-            </button>
-            <button class="btn btn-pdf" onclick="savePDF()">
-                📄 Save as PDF
-            </button>
-        </div>
+        @media print {
+            body { padding: 0; background: white; }
+            .page-container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 20px; }
+            .actions { display: none; }
+        }
+    </style>
+</head>
 
-        <!-- CONTENT (EDITABLE AREA) -->
+<body>
+
+    <div class="actions">
+        <button class="btn btn-edit" onclick="toggleEdit()">✏️ Edit Document</button>
+        <button class="btn btn-pdf" onclick="savePDF()">📄 Print / Save PDF</button>
+    </div>
+
+    <div class="page-container">
         <div id="complaintContent">
+            
+            <div class="date-line">
+                Date: {{ problem.created_at.strftime("%d %B %Y") }}
+            </div>
 
-            <h2 contenteditable="false">
-                Subject: Civic Issue Complaint – {{ problem.category }}
-            </h2>
+            <div class="recipient-block edit-target">
+                To,<br>
+                The Concerned Department/Authority,<br>
+                Municipal Corporation Office,<br>
+                {{ problem.location.area_name }}
+            </div>
 
-            <p class="subtitle" contenteditable="false">
-                Submitted via CivicFix – Community Civic Reporting Platform
-            </p>
+            <div class="subtitle">
+                Reference ID: #CF-{{ problem._id }} | Submitted via CivicFix Platform
+            </div>
+
+            <h2>Subject: Formal Complaint regarding {{ problem.category }}</h2>
 
             <div class="section">
-                <span class="badge verified">✔ Verified Issue</span>
-                <span class="badge priority">🔥 Top Priority</span>
+                <span class="badge verified">VERIFIED REPORT</span>
+                <span class="badge priority">PRIORITY LEVEL: {{ priority_score }}</span>
             </div>
 
             <div class="section edit-target">
-                <span class="label">Issue Description</span>
+                <p>Respected Authority,</p>
+                
+                <p>We are writing to bring to your immediate attention a pressing civic issue regarding <strong>{{ problem.category }}</strong> located at <strong>{{ problem.location.area_name }}</strong>.</p>
+                
+                <span class="label">Detailed Description:</span>
                 <p>{{ problem.description }}</p>
             </div>
 
-            <div class="section edit-target">
-                <span class="label">Location</span>
-                <p>{{ problem.location.area_name }}</p>
-            </div>
-
             <div class="section">
-                <span class="label">Reported On</span>
-                {{ problem.created_at.strftime("%d %B %Y") }}
-            </div>
-
-            <div class="section">
-                <span class="label">Community Support</span>
-                {{ problem.votes }} citizens have supported this issue
-            </div>
-
-            <div class="section">
-                <span class="label">Priority Score</span>
-                {{ priority_score }}
+                <span class="label">Public Interest & Impact</span>
+                <p>This issue has garnered significant concern from the local community. Currently, <strong>{{ problem.votes }} citizens</strong> have formally supported this report, indicating a high level of public urgency.</p>
             </div>
 
             <hr>
 
             <div class="section edit-target">
                 <p>
-                    This issue has been reported and verified by multiple
-                    citizens using
-                    CivicFix, a community-driven platform that improves civic
-                    visibility
-                    and accountability.
+                    This report was generated and verified through <strong>CivicFix</strong>, a data-driven community platform. The data provided reflects real-time citizen feedback aimed at assisting authorities in identifying and prioritizing local maintenance and infrastructure needs.
                 </p>
 
                 <p>
-                    Given the urgency and public impact, we kindly request the
-                    concerned
-                    authority to review this issue and take appropriate action.
+                    We request you to acknowledge this complaint and provide a timeline for the necessary remedial actions. Prompt attention to this matter will greatly benefit the residents and improve the overall safety and hygiene of the locality.
                 </p>
             </div>
 
-            <div class="footer edit-target">
-                Sincerely,<br>
-                Concerned Citizens<br>
-                (via CivicFix)
+            <div class="footer-signature edit-target">
+                Sincerely,<br><br>
+                <strong>Concerned Citizens of {{ problem.location.area_name }}</strong><br>
+                <em>Reported via CivicFix Civic Visibility Platform</em>
             </div>
 
         </div>
+    </div>
 
-        <script>
-    let isEditing = false;
+    <script>
+        let isEditing = false;
 
-    function toggleEdit() {
-      isEditing = !isEditing;
+        function toggleEdit() {
+            isEditing = !isEditing;
+            const btn = document.querySelector('.btn-edit');
+            btn.innerText = isEditing ? "✅ Finish Editing" : "✏️ Edit Document";
 
-      document.querySelectorAll(".edit-target").forEach(el => {
-        el.contentEditable = isEditing;
-        el.classList.toggle("edit-mode", isEditing);
-      });
-    }
+            document.querySelectorAll(".edit-target").forEach(el => {
+                el.contentEditable = isEditing;
+                el.classList.toggle("edit-mode", isEditing);
+            });
+        }
 
-    function savePDF() {
-      window.print();
-    }
-  </script>
+        function savePDF() {
+            // Disable edit mode before printing
+            if(isEditing) toggleEdit();
+            window.print();
+        }
+    </script>
 
-    </body>
+</body>
 </html>

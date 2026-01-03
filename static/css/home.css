@@ -203,6 +203,7 @@ body.home .container {
   border: none;
   cursor: pointer;
   font-weight: 600;
+  text-decoration: none;
   color: var(--accent-secondary);
 }
 

@@ -1,0 +1,39 @@
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--bg-primary);
+  box-shadow: var(--card-shadow);
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 2rem;
+  margin-bottom: 6px;
+}
+
+.stat-card.success { border-left: 6px solid #22c55e; }
+.stat-card.warning { border-left: 6px solid #f59e0b; }
+.stat-card.danger { border-left: 6px solid #ef4444; }
+
+.stats-list {
+  list-style: none;
+  padding: 0;
+  max-width: 500px;
+}
+
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--bg-primary);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: var(--card-shadow);
+}
