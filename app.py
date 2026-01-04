@@ -18,9 +18,9 @@ MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
 db = client["civicfix"]
 problems_collection = db["problems"]
-
 users_collection = db["users"]
 votes_collection = db["votes"]
+likes_collection = db["likes"]
 
 # Upload folder
 UPLOAD_FOLDER = "static/uploads"
@@ -36,6 +36,18 @@ CATEGORY_WEIGHTS = {
     "Other": 4
 }
 
+
+def login_required(view_func):
+    @wraps(view_func)
+    def wrapped(*args, **kwargs):
+        if "user_id" not in session:
+            # AJAX / fetch request
+            if request.headers.get("Accept") == "application/json":
+                return jsonify({"error": "LOGIN_REQUIRED"}), 401
+            return jsonify({"error": "LOGIN_REQUIRED"}), 401
+        return view_func(*args, **kwargs)
+    return wrapped
+
 def calculate_priority(problem):
     votes_score = problem.get("votes", 0) * 2
     days_pending = (datetime.utcnow() - problem["created_at"]).days
@@ -50,7 +62,7 @@ def calculate_priority(problem):
 @app.route("/home")
 def home():
     problems = list(
-        problems_collection.find().sort("created_at", -1)
+        problems_collection.find({"status": "pending"})
     )
 
     for problem in problems:
@@ -105,7 +117,8 @@ def submit_problem():
         "image": f"uploads/{filename}" if filename else None,
         "status": "pending",
         "votes": 0,
-        "is_verified": True, 
+        "is_verified": True,
+        "likes":0, 
         "user_id": ObjectId(session["user_id"]), # 🔥 ownership
         "created_at": datetime.utcnow(),
     }
@@ -202,6 +215,93 @@ def my_issues():
         issues=issues,
         admin_email=os.getenv("ADMIN_EMAIL")
     )  
+
+@app.route("/impact")
+def impact():
+    in_progress = list(
+        problems_collection.find({"status": "Acknowledged"})
+        .sort("created_at", -1)
+    )
+
+    resolved = list(
+        problems_collection.find({"status": "Resolved"})
+        .sort("created_at", -1)
+    )
+
+    # Safe defaults
+    for problem in resolved:
+        problem["likes"] = problem.get("likes", 0)
+
+    if "user_id" in session:
+        liked = likes_collection.find_one({
+            "user_id": ObjectId(session["user_id"]),
+            "problem_id": problem["_id"]
+        })
+        problem["has_liked"] = bool(liked)
+    else:
+        problem["has_liked"] = False
+
+
+    stats = {
+        "reported": problems_collection.count_documents({}),
+        "pending": problems_collection.count_documents({"status": "Pending"}),
+        "in_progress": len(in_progress),
+        "resolved": len(resolved),
+    }
+
+    return render_template(
+        "impact.html",
+        in_progress=in_progress,
+        resolved=resolved,
+        stats=stats
+    )
+    
+@app.route("/like/<problem_id>", methods=["POST"])
+def like(problem_id):
+
+    if "user_id" not in session:
+        return jsonify({"error": "Login required"}), 401
+
+    user_id = session["user_id"]
+
+    # ✅ Allow likes ONLY for resolved problems
+    problem = problems_collection.find_one({
+        "_id": ObjectId(problem_id),
+        "status": "Resolved"
+    })
+
+    if not problem:
+        return jsonify({"error": "Invalid problem"}), 400
+
+    # 🔒 Check if user already liked
+    existing_like = likes_collection.find_one({
+        "user_id": ObjectId(user_id),
+        "problem_id": ObjectId(problem_id)
+    })
+
+    if existing_like:
+        return jsonify({"error": "Already liked"}), 400
+
+    # ✅ Record like
+    likes_collection.insert_one({
+        "user_id": ObjectId(user_id),
+        "problem_id": ObjectId(problem_id),
+        "created_at": datetime.utcnow()
+    })
+
+    # ✅ Increment like count
+    problems_collection.update_one(
+        {"_id": ObjectId(problem_id)},
+        {"$inc": {"likes": 1}}
+    )
+
+    updated_problem = problems_collection.find_one(
+        {"_id": ObjectId(problem_id)}
+    )
+
+    return jsonify({
+        "likes": updated_problem.get("likes", 0)
+    })
 
 @app.route("/update_status/<issue_id>", methods=["POST"])
 def update_status(issue_id):

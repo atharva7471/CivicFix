@@ -19,6 +19,7 @@
             <ul class="nav-links">
                 <li><a href="#feed">Feed</a></li>
                 <li><a href="/add_problem">Report Issue</a></li>
+                <li><a href="/impact">Impact</a></li>
                 {% if session.get("user_id") %}
                 <!-- Logged in -->
                 <li class="account-menu">
@@ -88,9 +89,9 @@
 
                         <!-- CARD HEADER -->
                         <div class="card-header">
-                            <span class="category-tag">{{ problem.category
-                                }}</span>
-
+                            <span class="category-tag">
+                                {{ problem.category}}
+                            </span>
                             <span
                                 class="status-badge status-{{ problem.status|lower }}">
                                 {{ problem.status }}

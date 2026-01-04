@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Impact – CivicFix{% endblock %}
+{% block head %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/impact.css') }}">
+{% endblock %}
+{% block container %}
+<div class="impact-wrapper">
+    <h1>Our Civic Impact</h1>
+    <p class="subtitle">From reporting problems to real-world solutions.</p>
+
+    <div class="impact-stats">
+        <div class="stat-card">
+            <span class="stat-num">{{ stats.reported }}</span>
+            <span class="stat-label">Reported</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-num">{{ stats.pending }}</span>
+            <span class="stat-label">Pending</span>
+        </div>
+        <div class="stat-card yellow">
+            <span class="stat-num">{{ stats.in_progress }}</span>
+            <span class="stat-label">In Progress</span>
+        </div>
+        <div class="stat-card green">
+            <span class="stat-num">{{ stats.resolved }}</span>
+            <span class="stat-label">Resolved</span>
+        </div>
+    </div>
+
+    <div class="impact-tabs">
+        <button class="tab-btn active" data-tab="progress">🟡 In
+            Progress</button>
+        <button class="tab-btn" data-tab="resolved">🟢 Resolved</button>
+        <button class="tab-btn" data-tab="about">🧠 How It Works</button>
+    </div>
+
+    <hr class="tab-divider">
+
+    <div class="tab-content active" id="progress">
+        {% if in_progress|length == 0 %}
+        <div class="empty-state">No issues are currently in progress.</div>
+        {% else %}
+        <div class="feed-grid">
+            {% for problem in in_progress %}
+            <div class="problem-card border-yellow">
+                <div class="card-header">
+                    <span class="category-tag">{{ problem.category }}</span>
+                    <span class="status-badge progress">Addressing...</span>
+                </div>
+                <div class="card-body">
+                    <p>{{ problem.description }}</p>
+                    <div class="location-info">📍 {{ problem.location.area_name
+                        }}</div>
+                </div>
+                <div class="card-footer">
+                    <small>Verified & assigned to department</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="tab-content" id="resolved">
+        {% if resolved|length == 0 %}
+        <div class="empty-state">No issues resolved yet. Be the first to
+            report!</div>
+        {% else %}
+        <div class="feed-grid">
+            {% for problem in resolved %}
+            <div class="problem-card border-green">
+                <div class="card-header">
+                    <span class="category-tag">{{ problem.category }}</span>
+                    <span class="status-badge resolved">Fixed</span>
+                </div>
+                <div class="card-body">
+                    <p>{{ problem.description }}</p>
+                    <div class="location-info">📍 {{ problem.location.area_name
+                        }}</div>
+                </div>
+                <div class="card-footer">
+                    <button class="like-btn" data-id="{{ problem._id }}">
+                        ❤️ <span>{{ problem.likes }}</span>
+                    </button>
+
+                    <small>Solution verified by community</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="tab-content" id="about">
+        <div class="how-it-works-container">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div><strong>Report</strong> – Citizens log issues with photos
+                    and locations.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div><strong>Verify</strong> – Local community members confirm
+                    the problem exists.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div><strong>Prioritize</strong> – AI and user votes push
+                    critical issues to the top.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">4</div>
+                <div><strong>Escalate</strong> – Formal complaint letters are
+                    generated for authorities.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-num">5</div>
+                <div><strong>Resolve</strong> – Success stories are tracked and
+                    celebrated.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast-container"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/impact.js') }}"></script>
+{% endblock %}
