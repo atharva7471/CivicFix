@@ -6,33 +6,38 @@
 {% endblock %}
 {% block container %}
 <div class="impact-wrapper">
-    <h1>Our Civic Impact</h1>
-    <p class="subtitle">From reporting problems to real-world solutions.</p>
+    <div class="impact-head">
+        <div class="title">
+            <h1>Our Civic Impact</h1>
+            <p class="subtitle">From reporting problems to real-world
+                solutions.</p>
+            <a href="/working">🧠How It Works</a>
+        </div>
 
-    <div class="impact-stats">
-        <div class="stat-card">
-            <span class="stat-num">{{ stats.reported }}</span>
-            <span class="stat-label">Reported</span>
-        </div>
-        <div class="stat-card">
-            <span class="stat-num">{{ stats.pending }}</span>
-            <span class="stat-label">Pending</span>
-        </div>
-        <div class="stat-card yellow">
-            <span class="stat-num">{{ stats.in_progress }}</span>
-            <span class="stat-label">In Progress</span>
-        </div>
-        <div class="stat-card green">
-            <span class="stat-num">{{ stats.resolved }}</span>
-            <span class="stat-label">Resolved</span>
+        <div class="impact-stats">
+            <div class="stat-card">
+                <span class="stat-num">{{ stats.reported }}</span>
+                <span class="stat-label">Reported</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-num">{{ stats.pending }}</span>
+                <span class="stat-label">Pending</span>
+            </div>
+            <div class="stat-card yellow">
+                <span class="stat-num">{{ stats.in_progress }}</span>
+                <span class="stat-label">In Progress</span>
+            </div>
+            <div class="stat-card green">
+                <span class="stat-num">{{ stats.resolved }}</span>
+                <span class="stat-label">Resolved</span>
+            </div>
         </div>
     </div>
 
     <div class="impact-tabs">
-        <button class="tab-btn active" data-tab="progress">🟡 In
+        <button class="tab-btn active" data-tab="progress">🟡In
             Progress</button>
-        <button class="tab-btn" data-tab="resolved">🟢 Resolved</button>
-        <button class="tab-btn" data-tab="about">🧠 How It Works</button>
+        <button class="tab-btn" data-tab="resolved">🟢Resolved</button>
     </div>
 
     <hr class="tab-divider">
@@ -91,38 +96,7 @@
         </div>
         {% endif %}
     </div>
-
-    <div class="tab-content" id="about">
-        <div class="how-it-works-container">
-            <div class="step-item">
-                <div class="step-num">1</div>
-                <div><strong>Report</strong> – Citizens log issues with photos
-                    and locations.</div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">2</div>
-                <div><strong>Verify</strong> – Local community members confirm
-                    the problem exists.</div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">3</div>
-                <div><strong>Prioritize</strong> – AI and user votes push
-                    critical issues to the top.</div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">4</div>
-                <div><strong>Escalate</strong> – Formal complaint letters are
-                    generated for authorities.</div>
-            </div>
-            <div class="step-item">
-                <div class="step-num">5</div>
-                <div><strong>Resolve</strong> – Success stories are tracked and
-                    celebrated.</div>
-            </div>
-        </div>
-    </div>
 </div>
-
 <div id="toast-container"></div>
 {% endblock %}
 

@@ -1,0 +1,126 @@
+/* CONTAINER SETUP */
+.how-it-works-container {
+    max-width: 850px;
+    margin: 10px auto;
+    /* padding: 20px; */
+    color: var();
+}
+
+/* TYPOGRAPHY */
+.how-it-works-container h2 {
+    text-align: center;
+    font-size: 2.25rem;
+    margin-bottom: 15px;
+}
+
+.how-intro {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 50px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* STEP ITEMS (THE CARDS) */
+.step-item {
+    display: flex;
+    gap: 25px;
+    background: var(--bg-primary);
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: var(--navbar-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+.step-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* STEP NUMBER CIRCLE */
+.step-num {
+    color: var(--always-white);
+    background: var(--accent-secondary);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    box-shadow: var(--card-shadow);
+}
+
+/* CONTENT INSIDE CARDS */
+.step-item strong {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.step-item p {
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.step-item small {
+    display: block;
+    color: var(--text-muted);
+    width: fit-content;
+    background-color: var(--bg-body);
+    font-style: italic;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border-left: 3px solid var(--accent-secondary);
+}
+
+/* LIST STYLING (Step 4 & 6) */
+.how-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+    display: grid;
+    grid-template-columns: repeat( minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.how-list li {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--border-light);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+/* CLOSING SECTION */
+.how-closing {
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent-secondary);
+    font-size: 1.1rem;
+    margin-top: 40px;
+    padding: 20px;
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .step-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .how-list {
+        grid-template-columns: 1fr;
+    }
+}

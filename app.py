@@ -323,6 +323,10 @@ def update_status(issue_id):
 
     return redirect(request.referrer)
 
+@app.route("/working")
+def working():
+    return render_template("works.html")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

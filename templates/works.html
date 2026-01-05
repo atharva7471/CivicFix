@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Impact – CivicFix{% endblock %}
+{% block head %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/work.css') }}">
+{% endblock %}
+{% block container %}
+<div class="how-it-works-container">
+    <h2>🧠 How CivicFix Works</h2>
+    <p class="how-intro">
+        CivicFix is a citizen-powered platform designed to make public problems
+        visible,
+        prioritized, and accountable. Every feature in this app is built to
+        ensure that
+        real issues get real attention — transparently and fairly.
+    </p>
+
+    <!-- STEP 1 -->
+    <div class="step-item">
+        <div class="step-num">1</div>
+        <div>
+            <strong>Problem Reporting</strong>
+            <p>
+                Any registered citizen can report a civic issue by adding a
+                description,
+                location, category, and images. This ensures that problems are
+                grounded
+                in real-world evidence.
+            </p>
+            <small>
+                Example: Road damage, water leakage, garbage overflow,
+                electricity issues.
+            </small>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-item">
+        <div class="step-num">2</div>
+        <div>
+            <strong>Public Visibility & Community Review</strong>
+            <p>
+                Once submitted, the issue appears in the public feed of the same
+                locality.
+                Other citizens can view, support, and validate the issue.
+            </p>
+            <small>
+                This prevents fake or irrelevant reports and builds community
+                trust.
+            </small>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-item">
+        <div class="step-num">3</div>
+        <div>
+            <strong>Voting System (Priority Signal)</strong>
+            <p>
+                Citizens can vote on problems they believe are genuine and
+                urgent.
+                Each citizen can vote only once per problem.
+            </p>
+            <small>
+                More votes = higher public importance. Votes cannot be
+                manipulated.
+            </small>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-item">
+        <div class="step-num">4</div>
+        <div>
+            <strong>Priority Calculation</strong>
+            <p>
+                Every problem is assigned a priority score based on:
+            </p>
+            <ul class="how-list">
+                <li>✔ Number of citizen votes</li>
+                <li>✔ Verification status</li>
+                <li>✔ Recency of the issue</li>
+                <li>✔ Area-level impact</li>
+            </ul>
+            <small>
+                This ensures urgent and widely supported problems rise
+                naturally.
+            </small>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-item">
+        <div class="step-num">5</div>
+        <div>
+            <strong>Daily Top 5 Selection</strong>
+            <p>
+                At the end of each day, the system automatically selects the
+                <strong>Top 5 highest-priority problems</strong>.
+                These represent the most critical civic issues at that time.
+            </p>
+            <small>
+                Selection is automatic, transparent, and updated daily.
+            </small>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-item">
+        <div class="step-num">6</div>
+        <div>
+            <strong>Solving Pipeline & Status Management</strong>
+            <p>
+                Selected Top 5 issues are moved into the solving pipeline and
+                assigned
+                the <strong>Pending</strong> status.
+            </p>
+            <ul class="how-list">
+                <li>🟡 Pending – Awaiting authority action</li>
+                <li>🟠 In Progress – Being addressed</li>
+                <li>🟢 Resolved – Successfully fixed</li>
+            </ul>
+            <small>
+                Status updates are visible to all citizens.
+            </small>
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-item">
+        <div class="step-num">7</div>
+        <div>
+            <strong>Authority Escalation & Export</strong>
+            <p>
+                For high-priority issues, the system generates structured
+                reports
+                that can be exported and shared with concerned departments or
+                authorities.
+            </p>
+            <small>
+                Exports include issue details, images, vote count, and location
+                data.
+            </small>
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-item">
+        <div class="step-num">8</div>
+        <div>
+            <strong>Resolution & Community Verification</strong>
+            <p>
+                Once an issue is marked resolved, citizens can verify the
+                outcome.
+                Verified resolutions are showcased in the Impact section.
+            </p>
+            <small>
+                This closes the loop — from reporting to real-world impact.
+            </small>
+        </div>
+    </div>
+
+    <hr style="margin: 30px 0;">
+
+    <p class="how-closing">
+        CivicFix is not just a reporting tool — it is a shared civic
+        responsibility system.
+        Every vote, report, and verification helps prioritize what truly
+        matters.
+    </p>
+</div>
+{% endblock %}

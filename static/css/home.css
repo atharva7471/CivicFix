@@ -42,10 +42,9 @@ body.home .navbar.fixed .logout {
 /* =========================
    HERO SECTION
    ========================= */
-
 .hero {
-  height: 100vh;
-  background:
+  height: 115vh;
+  background: 
     linear-gradient(to bottom,
       rgba(17, 24, 39, 0.35),
       rgba(17, 24, 39, 0.65)),
@@ -53,8 +52,22 @@ body.home .navbar.fixed .logout {
 
   display: flex;
   align-items: flex-end;
-  padding: 0 64px 90px;
+  padding: 0 64px 180px;
+
+  -webkit-mask-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M0,160L60,176C120,192,240,224,360,234.7C480,245,600,235,720,208C840,181,960,139,1080,149.3C1200,160,1320,224,1380,256L1440,288L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z'%3E%3C/path%3E%3C/svg%3E"),
+    linear-gradient(black, black);
+
+  -webkit-mask-size: 100% 201px, 100% calc(100% - 200px);
+  mask-size: 100% 201px, 100% calc(100% - 200px); /* 201px adds 1px of overlap */
+
+  -webkit-mask-position: bottom, top;
+  mask-position: bottom, top;
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
+
 
 .hero-content {
   max-width: 640px;
@@ -88,7 +101,7 @@ FEED SECTION
 ========================= */
 
 body.home .container {
-  padding-top: 80px;
+  padding-top: 0;
   background: linear-gradient(180deg,
       var(--bg-body) 0%,
       var(--bg-primary) 100%);
@@ -147,7 +160,7 @@ body.home .container {
   font-size: 0.75rem;
   padding: 4px 12px;
   border-radius: 20px;
-  background: #fff7ed;
+  background: var(--bg-primary);
   color: var(--accent-secondary);
 }
 
