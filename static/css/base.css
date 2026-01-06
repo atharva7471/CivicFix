@@ -9,7 +9,7 @@
   --bg-primary: #ffffff;
 
   /* Text */
-  --text-primary: #111827;
+  --text-primary: #0e1420;
   --text-secondary: #374151;
   --text-muted: #666c78;
   --text-inverse: #ffffff;
@@ -27,6 +27,15 @@
   /* Navbar */
   --navbar-bg: #ffffff;
   --navbar-text: #111827;
+
+  /* Status Colors */
+  --status-open: #e74c3c;
+  /* Red */
+  --status-pending: #f39c12;
+  /* Orange */
+  --status-resolved: #27ae60;
+  /* Green */
+  --status-default: #95a5a6;
 }
 
 .dark {
@@ -90,9 +99,13 @@ body {
 .navbar a {
   list-style: none;
   text-decoration: none;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 600;
   color: var(--navbar-text);
+}
+
+.navbar a span {
+  color: var(--accent-secondary);
 }
 
 /* Navigation links */

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Issue Details – CivicFix{% endblock %}
+
+{% block head %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/issue_detail.css') }}">
+{% endblock %}
+
+{% block container %}
+<div class="issue-detail-wrapper" data-aos="fade-up">
+    <!-- HEADER -->
+    <div class="issue-header">
+        <div class="header-left">
+            <span class="category-tag">{{ problem.category }}</span>
+            {% if problem.is_verified %}
+            <span class="verified-badge">✔ Verified</span>
+            {% endif %}
+        </div>
+
+        <span class="status-badge status-{{ problem.status|lower }}">
+            {{ problem.status }}
+        </span>
+    </div>
+
+    <!-- TITLE -->
+    <h1 class="issue-title">
+        {{ problem.category }} Issue
+    </h1>
+
+    <!-- META INFO -->
+    <div class="issue-meta">
+        <p>
+            👤 <strong>Reported by:</strong>
+            {{ problem.reported_by or "Citizen" }}
+        </p>
+
+        <p>📍 <strong>Location:</strong>
+            {{ problem.location.area_name if problem.location else
+            "Unknown area" }}
+        </p>
+        <p>📅 <strong>Reported on:</strong>
+            {{ problem.created_at.strftime("%d %b %Y") if problem.created_at }}
+        </p>
+    </div>
+
+    <!-- IMAGE -->
+    {% if problem.image %}
+    <div class="issue-image">
+        <img src="{{ url_for('static', filename=problem.image) }}"
+            alt="Reported issue image">
+    </div>
+    {% endif %}
+
+    <!-- DESCRIPTION -->
+    <section class="issue-section">
+        <h3>📝 Issue Description</h3>
+        <p>{{ problem.description }}</p>
+    </section>
+
+    <!-- PRIORITY & VOTES -->
+    <section class="issue-section">
+        <h3>🔥 Priority & Public Support</h3>
+        <div class="info-grid">
+            <div class="info-box">
+                <span class="label">Priority Score</span>
+                <span class="value">{{ priority_score }}</span>
+            </div>
+            <div class="info-box">
+                <span class="label">Total Votes</span>
+                <span class="value">{{ problem.votes }}</span>
+            </div>
+            <div class="info-box">
+                <span class="label">Top Priority</span>
+                <span class="value">
+                    {{ "Yes" if problem.is_top_priority else "No" }}
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATUS -->
+    <section class="issue-section">
+        <h3>🪧Current Status</h3>
+        <p>
+            This issue is currently marked as
+            <strong>{{ problem.status }}</strong>.
+            Status updates are visible to all citizens for transparency.
+        </p>
+    </section>
+
+    <!-- EXPORT -->
+    <section class="issue-section">
+        <h3>📋 Complaint Export</h3>
+
+        {% if problem.is_verified and is_top_priority %}
+        <a href="/export/{{ problem._id }}" class="export-btn">
+            Export Official Complaint
+        </a>
+        {% else %}
+        <p class="export-hint">
+            Export becomes available once the issue is verified and
+            reaches high priority through citizen votes.
+        </p>
+        {% endif %}
+    </section>
+
+    <!-- BACK -->
+    <div class="issue-actions">
+        <a href="/home" class="back-link">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

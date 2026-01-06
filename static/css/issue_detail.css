@@ -1,0 +1,218 @@
+.issue-detail-wrapper {
+    max-width: 900px;
+    margin: 3rem auto;
+    background-color: var(--bg-primary);
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    padding: 2.5rem;
+    overflow: hidden; /* Contains floats/margins */
+}
+
+.issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.category-tag {
+    background-color: var(--status-default);
+    color: var(--text-primary);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.verified-badge {
+    background-color: var(--bg-body);
+    color: var(--status-resolved);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+}
+
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    background-color: var(--status-default); /* Fallback */
+}
+
+.status-open, .status-pending { background-color: var(--status-open); }
+.status-inprogress, .status-processing { background-color: var(--status-pending); }
+.status-resolved, .status-closed { background-color: var(--status-resolved); }
+
+.issue-title {
+    font-size: 2rem;
+    margin: 0 0 1.5rem 0;
+    color: var(--text-primary);
+    font-weight: 800;
+}
+
+.issue-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--text-secondary);
+    margin-bottom: 2rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.issue-meta p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.issue-meta strong {
+    color: var(--text-primary);
+}
+
+.issue-image {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.issue-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.issue-section {
+    margin-top: 50px;
+    margin-bottom: 2.5rem;
+}
+
+.issue-section h3 {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--accent-color);
+    padding-left: 10px;
+}
+
+.issue-section p {
+    font-size: 1.05rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.info-box {
+    background-color: var(--bg-body);
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.info-box:hover {
+    transform: translateY(-2px);
+}
+
+.info-box .label {
+    display: block;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.info-box .value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.export-btn {
+    display: inline-block;
+    background-color: var(--text-secondary);
+    color: var(--bg-body);
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    box-shadow: var(--card-shadow);
+}
+
+.export-btn:hover {
+    background-color: var(--accent-primary);
+    box-shadow: var(--card-shadow);
+}
+
+.export-hint {
+    color: var(--status-pending);
+    font-style: italic;
+    font-size: 0.9rem;
+    background-color: var(--bg-body);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.issue-actions {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--text-secondary);
+}
+
+.back-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 600px) {
+    .issue-detail-wrapper {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .issue-title {
+        font-size: 1.6rem;
+    }
+
+    .issue-meta {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}

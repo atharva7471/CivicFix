@@ -15,7 +15,7 @@
     <body class="home">
         <!-- NAVBAR (single navbar) -->
         <nav class="navbar" id="navbar" data-aos="fade-down">
-            <a href="{{ url_for('home') }}">CivicFix</a>
+            <a href="{{ url_for('home') }}">Civic<span>Fix</span></a>
             <ul class="nav-links">
                 <li><a href="#feed">Feed</a></li>
                 <li><a href="/add_problem">Report Issue</a></li>
@@ -74,7 +74,6 @@
                     <p class="guest-hint">Login to vote or report issues.</p>
                     {% endif %}
                 </div>
-
                 <div class="feed-container">
 
                     {% if problems|length == 0 %}
@@ -86,7 +85,6 @@
                         data-aos="fade-up"
                         data-aos-delay="{{ loop.index0 * 100 }}"
                         data-aos-once="true">
-
                         <!-- CARD HEADER -->
                         <div class="card-header">
                             <span class="category-tag">
@@ -97,7 +95,8 @@
                                 {{ problem.status }}
                             </span>
                             <span>{% if problem.is_verified %}
-                                <span class="verified-badge">✔ Verified</span>
+                                <span class="verified-badge">✔
+                                    Verified</span>
                                 {% endif %}</span>
                             <span class="priority-badge">
                                 🔥 Priority {{ problem.priority_score }}
@@ -114,7 +113,8 @@
                                     %}selected{% endif %}>
                                     Pending
                                 </option>
-                                <option {% if problem.status == "Acknowledged"
+                                <option {% if problem.status ==
+                                    "Acknowledged"
                                     %}selected{% endif %}>
                                     Acknowledged
                                 </option>
@@ -135,12 +135,15 @@
                         {% endif %}
 
                         <!-- BODY -->
-                        <div class="card-body">
-                            <p class="description">{{ problem.description }}</p>
-                            <div class="location-info">
-                                📍 {{ problem.location.area_name }}
+                        <a href="/issue/{{ problem._id }}" class="card-link">
+                            <div class="card-body">
+                                <p class="description">{{ problem.description
+                                    }}</p>
+                                <div class="location-info">
+                                    📍 {{ problem.location.area_name }}
+                                </div>
                             </div>
-                        </div>
+                        </a>
 
                         <!-- FOOTER -->
                         <div class="card-footer">
@@ -148,8 +151,11 @@
                                 data-id="{{ problem._id }}">
                                 ▲ <span>{{ problem.votes }} Votes</span>
                             </button>
-                            <button class="share-btn">
-                                Share</button>
+                            <button
+                                class="share-btn"
+                                data-url="{{ request.url_root }}problem/{{ problem._id }}">
+                                Share
+                            </button>
                             {% if problem.is_verified and
                             problem.is_top_priority %}
                             <a href="/export/{{ problem._id }}"

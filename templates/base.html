@@ -15,7 +15,7 @@
   </head>
   <body>
     <nav class="navbar" id="navbar" data-aos="fade-down" data-aos-once="false">
-      <a href="{{ url_for('home') }}">CivicFix</a>
+      <a href="{{ url_for('home') }}">Civic<span>Fix</span></a>
       <ul class="nav-links">
         <li><a href="/home">Home</a></li>
         <li><a href="/add_problem">Report Issue</a></li>
@@ -54,7 +54,7 @@
     <div class="container">
       {% block container %}{% endblock %}
     </div>
-    <footer class="civic-footer">
+    <footer class="civic-footer" data-aos="fade">
       <div class="footer-container">
         <div class="footer-brand">
           <h3 class="footer-logo">Civic<span>Fix</span></h3>

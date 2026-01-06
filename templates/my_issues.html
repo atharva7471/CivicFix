@@ -15,20 +15,24 @@
 {% endif %}
 
 <div class="feed-container">
+    {% if issues|length == 0 %}
+    <p class="empty-state">No problems reported by you yet.</p>
+    {% endif %}
     {% for issue in issues %}
-    <div class="problem-card">
-
+    <div class="problem-card"
+        data-aos="fade-up"
+        data-aos-delay="{{ loop.index0 * 100 }}"
+        data-aos-once="true">
         <div class="card-header">
             <span class="category-tag">{{ issue.category }}</span>
-
             <span class="status-badge status-{{ issue.status|lower }}">
                 {{ issue.status }}
             </span>
-            <span>
-                {% if issue.is_verified %}
-                <span class="verified-badge">✔ Verified</span>
-                {% endif %}
-            </span>
+
+            {% if issue.is_verified %}
+            <span class="verified-badge">✔ Verified</span>
+            {% endif %}
+
             <span class="priority-badge">
                 🔥 Priority {{ issue.priority_score }}
             </span>
@@ -39,10 +43,15 @@
             class="problem-img">
         {% endif %}
 
-        <div class="card-body">
-            <p>{{ issue.description }}</p>
-            <small>📍 {{ issue.location.area_name }}</small>
-        </div>
+        <a href="/issue/{{ issue._id }}" class="card-link">
+            <div class="card-body">
+                <p class="description">{{ issue.description
+                    }}</p>
+                <div class="location-info">
+                    📍 {{ issue.location.area_name }}
+                </div>
+            </div>
+        </a>
 
         <div class="card-footer">
             <span>{{ issue.votes }} votes</span>

@@ -56,36 +56,12 @@ def calculate_priority(problem):
 
     return votes_score + days_pending + category_score + verification_bonus
 
-
-#--------------------- All Routes here --------------------------#
-@app.route("/")
-@app.route("/home")
-def home():
-    problems = list(
-        problems_collection.find({"status": "pending"})
-    )
-
-    for problem in problems:
-        problem["priority_score"] = calculate_priority(problem)
-
-    # 🔥 SORT BY PRIORITY (DESC)
+def get_top_priority_issue_ids(limit=5):
+    problems = list(problems_collection.find())
+    for p in problems:
+        p["priority_score"] = calculate_priority(p)
     problems.sort(key=lambda x: x["priority_score"], reverse=True)
-    
-    # 🔥 Mark top 5
-    top_ids = set(p["_id"] for p in problems[:5])
-    for problem in problems:
-        problem["is_top_priority"] = problem["_id"] in top_ids
-
-    return render_template(
-        "home.html",
-        problems=problems,
-        admin_email=os.getenv("ADMIN_EMAIL")
-    )
-
-
-@app.route("/add_problem")
-def add_problem():
-    return render_template("add_problem.html")
+    return set(p["_id"] for p in problems[:limit])
 
 @app.route("/submit", methods=["POST"])
 def submit_problem():
@@ -117,9 +93,10 @@ def submit_problem():
         "image": f"uploads/{filename}" if filename else None,
         "status": "pending",
         "votes": 0,
-        "is_verified": True,
+        "is_verified": False,
         "likes":0, 
         "user_id": ObjectId(session["user_id"]), # 🔥 ownership
+        "reported_by": session.get("name"),
         "created_at": datetime.utcnow(),
     }
     problems_collection.insert_one(problem)
@@ -165,97 +142,6 @@ def vote(problem_id):
         )
     return jsonify({"votes": problem["votes"]})
 
-@app.route("/export/<problem_id>")
-def export_issue(problem_id):
-    problem = problems_collection.find_one(
-        {"_id": ObjectId(problem_id)}
-    )
-
-    if not problem:
-        return "Issue not found", 404
-
-    # Recalculate priority
-    problem["priority_score"] = calculate_priority(problem)
-
-    # Get top 5 IDs again (backend truth)
-    problems = list(problems_collection.find())
-    for p in problems:
-        p["priority_score"] = calculate_priority(p)
-
-    problems.sort(key=lambda x: x["priority_score"], reverse=True)
-    top_ids = set(p["_id"] for p in problems[:5])
-
-    # 🔒 HARD CHECK
-    if not problem.get("is_verified") or problem["_id"] not in top_ids:
-        return "Export not allowed for this issue", 403
-
-    return render_template(
-        "export_issue.html",
-        problem=problem,
-        priority_score=problem["priority_score"]
-    )
-
-@app.route("/my_issues")
-def my_issues():
-    user_id = ObjectId(session["user_id"])
-
-    issues = list(
-        problems_collection.find(
-            {"user_id": user_id}
-        ).sort("created_at", -1)
-    )
-    for issue in issues:
-        issue["priority_score"] = calculate_priority(issue)
-
-    # 🔥 SORT BY PRIORITY (DESC)
-    issues.sort(key=lambda x: x["priority_score"], reverse=True)
-    
-    return render_template(
-        "my_issues.html",
-        issues=issues,
-        admin_email=os.getenv("ADMIN_EMAIL")
-    )  
-
-@app.route("/impact")
-def impact():
-    in_progress = list(
-        problems_collection.find({"status": "Acknowledged"})
-        .sort("created_at", -1)
-    )
-
-    resolved = list(
-        problems_collection.find({"status": "Resolved"})
-        .sort("created_at", -1)
-    )
-
-    # Safe defaults
-    for problem in resolved:
-        problem["likes"] = problem.get("likes", 0)
-
-    if "user_id" in session:
-        liked = likes_collection.find_one({
-            "user_id": ObjectId(session["user_id"]),
-            "problem_id": problem["_id"]
-        })
-        problem["has_liked"] = bool(liked)
-    else:
-        problem["has_liked"] = False
-
-
-    stats = {
-        "reported": problems_collection.count_documents({}),
-        "pending": problems_collection.count_documents({"status": "Pending"}),
-        "in_progress": len(in_progress),
-        "resolved": len(resolved),
-    }
-
-    return render_template(
-        "impact.html",
-        in_progress=in_progress,
-        resolved=resolved,
-        stats=stats
-    )
-    
 @app.route("/like/<problem_id>", methods=["POST"])
 def like(problem_id):
 
@@ -302,7 +188,7 @@ def like(problem_id):
     return jsonify({
         "likes": updated_problem.get("likes", 0)
     })
-
+    
 @app.route("/update_status/<issue_id>", methods=["POST"])
 def update_status(issue_id):
     user = users_collection.find_one(
@@ -323,6 +209,147 @@ def update_status(issue_id):
 
     return redirect(request.referrer)
 
+#--------------------- All Routes here --------------------------#
+@app.route("/")
+@app.route("/home")
+def home():
+    problems = list(
+        problems_collection.find({"status": "pending"})
+    )
+
+    for problem in problems:
+        problem["priority_score"] = calculate_priority(problem)
+
+    # 🔥 SORT BY PRIORITY (DESC)
+    problems.sort(key=lambda x: x["priority_score"], reverse=True)
+    
+    # 🔥 Mark top 5
+    top_ids = set(p["_id"] for p in problems[:5])
+    for problem in problems:
+        problem["is_top_priority"] = problem["_id"] in top_ids
+
+    return render_template(
+        "home.html",
+        problems=problems,
+        admin_email=os.getenv("ADMIN_EMAIL")
+    )
+
+@app.route("/add_problem")
+def add_problem():
+    return render_template("add_problem.html")
+
+@app.route("/issue/<issue_id>")
+def issue_detail(issue_id):
+    problem = problems_collection.find_one(
+        {"_id": ObjectId(issue_id)}
+    )
+
+    if not problem:
+        abort(404)
+
+    priority_score = calculate_priority(problem)
+
+    # ✅ compute top 5 dynamically
+    top_ids = get_top_priority_issue_ids()
+    is_top_priority = problem["_id"] in top_ids
+
+    return render_template(
+        "issue_detail.html",
+        problem=problem,
+        priority_score=priority_score,
+        is_top_priority=is_top_priority
+    )
+
+@app.route("/export/<problem_id>")
+def export_issue(problem_id):
+    problem = problems_collection.find_one(
+        {"_id": ObjectId(problem_id)}
+    )
+
+    if not problem:
+        return "Issue not found", 404
+
+    # Recalculate priority
+    problem["priority_score"] = calculate_priority(problem)
+
+    # Get top 5 IDs again (backend truth)
+    problems = list(problems_collection.find())
+    for p in problems:
+        p["priority_score"] = calculate_priority(p)
+
+    problems.sort(key=lambda x: x["priority_score"], reverse=True)
+    top_ids = set(p["_id"] for p in problems[:5])
+
+    # 🔒 HARD CHECK
+    if not problem.get("is_verified") or problem["_id"] not in top_ids:
+        return "Export not allowed for this issue", 403
+
+    return render_template(
+        "export_issue.html",
+        problem=problem,
+        priority_score=problem["priority_score"]
+    )
+
+@app.route("/my_issues")
+def my_issues():
+    if "user_id" not in session:
+        abort(401)
+
+    issues = list(
+        problems_collection.find(
+            {"user_id": ObjectId(session["user_id"])}
+        )
+    )
+
+    # ✅ calculate priority for each issue
+    for issue in issues:
+        issue["priority_score"] = calculate_priority(issue)
+
+    return render_template(
+        "my_issues.html",
+        issues=issues
+    )
+
+
+@app.route("/impact")
+def impact():
+    in_progress = list(
+        problems_collection.find({"status": "Acknowledged"})
+        .sort("created_at", -1)
+    )
+
+    resolved = list(
+        problems_collection.find({"status": "Resolved"})
+        .sort("created_at", -1)
+    )
+
+    # Safe defaults
+    for problem in resolved:
+        problem["likes"] = problem.get("likes", 0)
+
+    if "user_id" in session:
+        liked = likes_collection.find_one({
+            "user_id": ObjectId(session["user_id"]),
+            "problem_id": problem["_id"]
+        })
+        problem["has_liked"] = bool(liked)
+    else:
+        problem["has_liked"] = False
+
+    stats = {
+        "reported": problems_collection.count_documents({}),
+        "pending": problems_collection.count_documents({"status": "Pending"}),
+        "in_progress": len(in_progress),
+        "resolved": len(resolved),
+    }
+
+    return render_template(
+        "impact.html",
+        in_progress=in_progress,
+        resolved=resolved,
+        stats=stats
+    )
+    
 @app.route("/working")
 def working():
     return render_template("works.html")
@@ -364,8 +391,8 @@ def login():
 
         # Store user session
         session["user_id"] = str(user["_id"])
-        session["user_name"] = user["name"]
-        session["user_email"] = user["email"]
+        session["name"] = user["name"]
+        session["email"] = user["email"]
         next_page = request.args.get("next")
         return redirect(next_page or url_for("home"))
     return render_template("login.html")
@@ -409,7 +436,6 @@ def admin_dashboard():
         category_stats=category_stats,
         area_stats=area_stats
     )
-
 
 if __name__ == "__main__":
     app.run(debug=True)
