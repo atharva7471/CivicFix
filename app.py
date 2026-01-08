@@ -42,8 +42,17 @@ CATEGORY_WEIGHTS = {
     "Water Supply": 5,
     "Drainage": 5,
     "Electricity": 4,
-    "Public Safety": 6,
-    "Other": 4
+    "Public Safety": 7,
+    "Education":7,
+    "Healthcare":9,
+    "Corruption":10,
+    "Pollution":6,
+    "Woman Safety":8,
+    "Child Labour":6,
+    "Illiteracy":7,
+    "Poverty":6,
+    "Environment":6,
+    "Other":6
 }
 
 
