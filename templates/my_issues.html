@@ -8,16 +8,13 @@
 {% endblock %}
 
 {% block container %}
-<h2 style="margin-bottom: 24px;">My Reported Issues</h2>
+<h2 data-aos="fade-up" style="margin-bottom: 24px;">My Reported Issues</h2>
 
 {% if issues|length == 0 %}
 <p class="empty-state">You haven’t reported any issues yet.</p>
 {% endif %}
 
 <div class="feed-container">
-    {% if issues|length == 0 %}
-    <p class="empty-state">No problems reported by you yet.</p>
-    {% endif %}
     {% for issue in issues %}
     <div class="problem-card"
         data-aos="fade-up"

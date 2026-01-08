@@ -1,7 +1,6 @@
 /* =========================
    HOME NAVBAR (ONLY HOME)
    ========================= */
-
 body.home .navbar {
   position: absolute;
   top: 0;
@@ -35,7 +34,7 @@ body.home .navbar.fixed a {
 }
 
 body.home .navbar.fixed .logout {
-  color: #ef4444;
+  color: var(--status-open);
   font-weight: 500;
 }
 
@@ -69,7 +68,6 @@ body.home .navbar.fixed .logout {
   mask-repeat: no-repeat;
 }
 
-
 .hero-content {
   max-width: 640px;
   color: var(--text-inverse);
@@ -100,7 +98,6 @@ body.home .navbar.fixed .logout {
 /* =========================
 FEED SECTION
 ========================= */
-
 body.home .container {
   padding-top: 0;
   background: linear-gradient(180deg,
@@ -173,9 +170,9 @@ body.home .container {
 }
 
 .card-link {
-    display: block;
-    width: 100%;
-    text-decoration: none;
+  display: block;
+  width: 100%;
+  text-decoration: none;
 }
 
 /* Hover effect (desktop only) */
@@ -193,7 +190,6 @@ body.home .container {
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
   }
 }
-
 
 .card-body {
   padding: 20px;
@@ -234,11 +230,6 @@ body.home .container {
   font-style: italic;
 }
 
-
-/* =========================
-   RESPONSIVE
-   ========================= */
-
 @media (max-width: 1024px) {
   .feed-container {
     grid-template-columns: repeat(2, 1fr);
@@ -247,12 +238,20 @@ body.home .container {
 
 @media (max-width: 640px) {
   .hero {
-    height: 70vh;
+    height: 100vh;
     padding: 0 24px 60px;
   }
 
+  .hero-content {
+    margin-bottom: 150px;
+  }
+
   .hero-content h1 {
-    font-size: 2.2rem;
+    font-size: 2rem;
+  }
+
+  .hero-content p {
+    font-size: 15px;
   }
 
   body.home .container {
@@ -262,5 +261,18 @@ body.home .container {
 
   .feed-container {
     grid-template-columns: 1fr;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .card-header,
+  .card-footer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
   }
 }

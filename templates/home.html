@@ -11,11 +11,19 @@
         <link
             href="https://unpkg.com/aos@2.3.4/dist/aos.css"
             rel="stylesheet" />
+        <link rel="icon" type="image/png"
+            href="{{ url_for('static', filename='images/favicon.png') }}">
+
     </head>
     <body class="home">
         <!-- NAVBAR (single navbar) -->
         <nav class="navbar" id="navbar" data-aos="fade-down">
             <a href="{{ url_for('home') }}">Civic<span>Fix</span></a>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
             <ul class="nav-links">
                 <li><a href="#feed">Feed</a></li>
                 <li><a href="/add_problem">Report Issue</a></li>
@@ -27,7 +35,7 @@
                         Profile
                     </button>
                     <div class="account-dropdown">
-                        <a href="/profile">👤{{ session.get("user_name",
+                        <a href="/profile">👤{{ session.get("name",
                             "Account") }}</a>
                         <a href="/my_issues">My Issues</a>
                         <a href="/logout" class="logout">Logout</a>
@@ -75,7 +83,6 @@
                     {% endif %}
                 </div>
                 <div class="feed-container">
-
                     {% if problems|length == 0 %}
                     <p class="empty-state">No problems reported yet.</p>
                     {% endif %}
@@ -95,8 +102,7 @@
                                 {{ problem.status }}
                             </span>
                             <span>{% if problem.is_verified %}
-                                <span class="verified-badge">✔
-                                    Verified</span>
+                                <span class="verified-badge">✔Verified</span>
                                 {% endif %}</span>
                             <span class="priority-badge">
                                 🔥 Priority {{ problem.priority_score }}
@@ -104,7 +110,7 @@
                         </div>
 
                         <!-- ADMIN STATUS UPDATE -->
-                        {% if session.get("user_email") == admin_email %}
+                        {% if session.get("email") == admin_email %}
                         <form class="admin-status-form"
                             method="POST"
                             action="/update_status/{{ problem._id }}">
@@ -153,7 +159,7 @@
                             </button>
                             <button
                                 class="share-btn"
-                                data-url="{{ request.url_root }}problem/{{ problem._id }}">
+                                data-url="{{ url_for('issue_detail', issue_id=problem._id, _external=True) }}">
                                 Share
                             </button>
                             {% if problem.is_verified and
@@ -168,7 +174,6 @@
                                 issues
                             </span>
                             {% endif %}
-
                         </div>
                     </div>
                     {% endfor %}

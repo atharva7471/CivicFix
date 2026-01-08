@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Civic Complaint – CivicFix</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <style>
         body {
             font-family: "Segoe UI", Arial, sans-serif;
@@ -118,6 +117,12 @@
             padding: 10px;
         }
 
+        .back {
+            margin-top: 20px;
+            text-decoration: none;
+            color: #059669;
+        }
+
         @media print {
             body { padding: 0; background: white; }
             .page-container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 20px; }
@@ -133,7 +138,7 @@
         <button class="btn btn-pdf" onclick="savePDF()">📄 Print / Save PDF</button>
     </div>
 
-    <div class="page-container">
+    <div class="page-container" data-aos="fade-up">
         <div id="complaintContent">
             
             <div class="date-line">
@@ -192,7 +197,9 @@
 
         </div>
     </div>
-
+    <div class="actions">
+        <a class="back" href="/home#feed">Back to Feed</a>
+    </div>
     <script>
         let isEditing = false;
 

@@ -26,7 +26,7 @@
         method="POST"
         enctype="multipart/form-data"
         data-auth="{{ 'true' if session.get('user_id') else 'false' }}">
-        <label>Category <span style="color: #ff4d4d;">*</span></label>
+        <label>Category <span>*</span></label>
         <select name="category" required>
             <option value>-- Select Category --</option>
             <option value="Road / Pothole">Road / Pothole</option>
@@ -38,8 +38,13 @@
             <option value="Other">Other</option>
         </select>
 
-        <label>Description <span style="color: #ff4d4d;">*</span></label>
-        <textarea name="description" placeholder="Describe the issue..."
+        <label>Title <span>*</span></label>
+        <textarea name="description" rows="1"
+            placeholder="Short title of the issue"
+            required></textarea>
+        <label>Detailed Description <span>*</span></label>
+        <textarea name="long_des" rows="10"
+            placeholder="Explain the problem in detail, What's getting affected?..."
             required></textarea>
 
         <label>Upload Evidence (Photo)</label>
@@ -47,8 +52,7 @@
 
         <div id="ml-feedback" class="hidden">Analyzing image with AI...</div>
 
-        <label>Select Location on Map <span
-                style="color: #ff4d4d;">*</span></label>
+        <label>Select Location on Map <span>*</span></label>
         <label style="font-size: small;">Search Location</label>
         <input
             type="text"
@@ -74,7 +78,8 @@
 
         <div class="human-check">
             <label class="checkbox-label">
-                <input type="checkbox" name="human_verified" id="humanCheck" required>
+                <input type="checkbox" name="human_verified" id="humanCheck"
+                    required>
                 I confirm this is a real issue and I am not submitting spam
             </label>
         </div>
@@ -82,10 +87,8 @@
 
     </form>
 </div>
-<div id="toast-container"></div>
+{% endblock %}
 {% block scripts %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="{{ url_for('static', filename='js/add_problem.js') }}"></script>
-{% endblock %}
-
 {% endblock %}

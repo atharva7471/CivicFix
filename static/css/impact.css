@@ -132,6 +132,10 @@ h1 {
     flex-direction: column;
 }
 
+.problem-card a{
+    text-decoration: none;
+}
+
 .card-header {
     display: flex;
     justify-content: space-between;
@@ -219,4 +223,62 @@ h1 {
     padding: 50px;
     color: #9ca3af;
     font-style: italic;
+}
+/* Mobile */
+@media (max-width: 480px) {
+  .impact-wrapper {
+    padding: 1rem;
+  }
+
+  .title h1 {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .title a {
+    font-size: 0.85rem;
+  }
+
+  /* Stats → single column */
+  .impact-stats {
+    flex-direction: column;
+  }
+
+  .stat-card {
+    width: 100%;
+  }
+
+  .stat-num {
+    font-size: 1.6rem;
+  }
+
+  /* Tabs full width */
+  .tab-btn {
+    width: 100%;
+  }
+
+  /* Feed grid → single column */
+  .feed-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .problem-card p {
+    font-size: 0.9rem;
+  }
+
+  .location-info,
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: 0.8rem;
+  }
+
+  .share-btn,
+  .like-btn {
+    font-size: 0.85rem;
+  }
 }

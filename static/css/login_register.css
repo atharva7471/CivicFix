@@ -114,17 +114,14 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
   transform: translateY(-1px);
 }
-
-/* =========================
-   RESPONSIVE
-   ========================= */
-
+/* --- Mobile Responsiveness --- */
 @media (max-width: 480px) {
   .auth-card {
-    padding: 28px 22px;
+    padding: 30px 20px; /* Reduce padding slightly on small screens */
+    box-shadow: none; /* Optional: Remove shadow for a flatter mobile look */
   }
 
   .auth-card h2 {
-    font-size: 1.4rem;
+    font-size: 1.75rem;
   }
 }

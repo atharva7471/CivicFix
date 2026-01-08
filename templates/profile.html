@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Profile – CivicFix{% endblock %}
+{% block head %}
+<link rel="stylesheet"
+    href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+{% block container %}
+<div class="profile-wrap" data-aos="fade-up">
+    <div class="profile-glass">
+        <h2 class="title">My Profile</h2>
+
+        <!-- PROFILE FORM -->
+        <form id="profileForm">
+            <label>Name</label>
+            <input type="text" name="name" value="{{ user.name }}" required>
+
+            <label>Email</label>
+            <input type="email" value="{{ user.email }}" disabled>
+
+            <button type="submit">Update Profile</button>
+        </form>
+
+        <div class="divider"></div>
+
+        <!-- PASSWORD FORM -->
+        <form id="passwordForm">
+            <label>Current Password</label>
+            <input type="password" name="current_password" required>
+
+            <label>New Password</label>
+            <input type="password" name="new_password" required>
+
+            <button type="submit" class="danger">Change Password</button>
+        </form>
+
+        <div class="divider"></div>
+
+        <!-- STATS -->
+        <div class="stats">
+            <p>🗳️ Votes: <strong>{{ total_votes }}</strong></p>
+            <p>📅 Joined: <strong>{{ user.created_at.strftime('%d %b %Y')
+                    }}</strong></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

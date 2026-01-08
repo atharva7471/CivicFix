@@ -52,6 +52,10 @@ form label {
   color: var(--text-secondary);
 }
 
+form label span {
+  color: #ef4444;
+}
+
 form select,
 form textarea,
 form input[type="text"],

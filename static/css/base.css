@@ -29,13 +29,13 @@
   --navbar-text: #111827;
 
   /* Status Colors */
-  --status-open: #e74c3c;
+  --status-open: #d23c2b;
   /* Red */
   --status-pending: #f39c12;
   /* Orange */
   --status-resolved: #27ae60;
   /* Green */
-  --status-default: #95a5a6;
+  --status-default: #708d90;
 }
 
 .dark {
@@ -43,7 +43,7 @@
   --bg-primary: #111827;
 
   --text-primary: #e5e7eb;
-  --text-secondary: #c7d2fe;
+  --text-secondary: #ced7fb;
   --text-muted: #9ca3af;
   --text-inverse: #020617;
 
@@ -100,7 +100,7 @@ body {
   list-style: none;
   text-decoration: none;
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 900;
   color: var(--navbar-text);
 }
 
@@ -248,6 +248,15 @@ THEME TOGGLE (SVG ICONS)
 
 .dark .moon-icon {
   opacity: 0;
+}
+
+.share-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--accent-secondary);
 }
 
 /* =========================
@@ -404,18 +413,20 @@ PAGE CONTAINER
 
 /* SOCIAL & BOTTOM */
 .social-icons {
-  margin-top: 20px;
   display: flex;
-  gap: 15px;
+  align-items: top;
+  margin-top: 20px;
+  gap: 25px;
 }
 
-.social-icons a {
+.social-icons a img {
+  display: flex;
   text-decoration: none;
   filter: grayscale(1);
   transition: filter 0.2s;
 }
 
-.social-icons a:hover {
+.social-icons a img:hover {
   filter: grayscale(0);
 }
 
@@ -428,31 +439,93 @@ PAGE CONTAINER
   color: var(--text-muted);
 }
 
+/* Mobile Menu Styling */
+.menu-toggle {
+  display: none;
+  /* Hidden by default on desktop */
+  flex-direction: column;
+  cursor: pointer;
+}
 
-/* =========================
-RESPONSIVE
-========================= */
-@media (max-width: 900px) {
-  .footer-container {
-    grid-template-columns: 1fr 1fr;
-  }
+.menu-toggle .bar {
+  height: 3px;
+  width: 25px;
+  background-color: #333;
+  /* Use your existing text color variable here */
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+/* Base Layout */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 40px 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  flex: 2;
+  /* Gives the brand description more space */
+  min-width: 250px;
+}
+
+.footer-links {
+  flex: 1;
+  min-width: 150px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    padding: 0 24px;
+  .menu-toggle {
+    display: flex;
   }
-
-  .container {
-    padding: 100px 24px 40px;
-  }
-
   .nav-links {
-    gap: 18px;
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 60%;
+    background-color: inherit;
+    padding: 20px 0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   }
-
-  .footer-container {
-    grid-template-columns: 1fr;
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-links li {
+    margin: 15px 0;
     text-align: center;
+  }
+  .account-dropdown {
+    position: static;
+    box-shadow: none;
+  }
+  .footer-container {
+    flex-direction: column;
+    /* Stack sections vertically */
+    text-align: center;
+    /* Center text for mobile aesthetics */
+    align-items: center;
+  }
+  .footer-brand {
+    margin-bottom: 20px;
+  }
+  .social-icons {
+    justify-content: center;
+    gap: 25px;
+  }
+  .footer-links ul {
+    padding: 0;
+    list-style: none;
   }
 }

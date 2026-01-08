@@ -5,14 +5,24 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from urllib.parse import quote_plus
 from functools import wraps
-from datetime import datetime
+from datetime import datetime,timedelta
+from flask_mail import Mail, Message
 from dotenv import load_dotenv
+import random
 import os
 
 app = Flask(__name__)
 load_dotenv()
 app.secret_key = os.getenv("APP_SECRET_KEY")
+# Mail configuration
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = "atharva7471@gmail.com"
+app.config["MAIL_PASSWORD"] = "xtlxmrvyqujj zlez"  # Gmail App Password
+app.config["MAIL_DEFAULT_SENDER"] = "CivicFix atharva7471@gmail.com"
 
+mail = Mail(app)
 # MongoDB storage
 MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
@@ -69,6 +79,7 @@ def submit_problem():
         return redirect(url_for("login"))
     category = request.form.get("category")
     description = request.form.get("description")
+    long_des = request.form.get("long_des")
     latitude = float(request.form.get("latitude"))
     longitude = float(request.form.get("longitude"))
     area_name = request.form.get("area_name") 
@@ -84,6 +95,7 @@ def submit_problem():
     problem = {
         "category": category,
         "description": description,
+        "long_des": long_des,
         # 📍 LOCATION DATA
         "location": {
             "type": "Point",
@@ -110,7 +122,10 @@ def vote(problem_id):
 
     user_id = session["user_id"]
 
-    # Check if this user already voted on this problem
+    problem = problems_collection.find_one({"_id": ObjectId(problem_id)})
+    if not problem:
+        return jsonify({"error": "Problem not found"}), 404
+
     existing_vote = votes_collection.find_one({
         "user_id": ObjectId(user_id),
         "problem_id": ObjectId(problem_id)
@@ -119,28 +134,20 @@ def vote(problem_id):
     if existing_vote:
         return jsonify({"error": "Already voted"}), 400
 
-    # Record vote
     votes_collection.insert_one({
         "user_id": ObjectId(user_id),
         "problem_id": ObjectId(problem_id),
         "created_at": datetime.utcnow()
     })
 
-    # Increment problem vote count
     problems_collection.update_one(
         {"_id": ObjectId(problem_id)},
         {"$inc": {"votes": 1}}
     )
-        
-    problem = problems_collection.find_one({"_id": problem.obj_id})
 
-    # 🔥 AUTO-VERIFY AFTER 5 VOTES
-    if problem["votes"] >= 5 and not problem.get("is_verified"):
-        problems_collection.update_one(
-            {"_id": problem.obj_id},
-            {"$set": {"is_verified": True}}
-        )
-    return jsonify({"votes": problem["votes"]})
+    updated_problem = problems_collection.find_one({"_id": ObjectId(problem_id)})
+
+    return jsonify({"votes": updated_problem["votes"]})
 
 @app.route("/like/<problem_id>", methods=["POST"])
 def like(problem_id):
@@ -208,6 +215,38 @@ def update_status(issue_id):
     )
 
     return redirect(request.referrer)
+
+@app.route("/verify-otp", methods=["GET", "POST"])
+def verify_otp():
+    pending = session.get("pending_user")
+
+    if not pending:
+        return redirect("/register")
+
+    if request.method == "POST":
+        entered_otp = request.form["otp"]
+
+        if entered_otp != pending["otp"]:
+            return "Invalid OTP"
+
+        # Check expiry
+        if datetime.utcnow() > datetime.fromisoformat(pending["expires"]):
+            session.pop("pending_user", None)
+            return "OTP expired. Please register again."
+
+        # ✅ Create user NOW
+        users_collection.insert_one({
+            "name": pending["name"],
+            "email": pending["email"],
+            "password": pending["password"],
+            "created_at": datetime.utcnow(),
+            "is_verified": True
+        })
+
+        session.pop("pending_user", None)
+
+        return redirect("/login")
+    return render_template("verify_otp.html")
 
 #--------------------- All Routes here --------------------------#
 @app.route("/")
@@ -309,10 +348,9 @@ def my_issues():
         "my_issues.html",
         issues=issues
     )
-
-
 @app.route("/impact")
 def impact():
+
     in_progress = list(
         problems_collection.find({"status": "Acknowledged"})
         .sort("created_at", -1)
@@ -323,18 +361,20 @@ def impact():
         .sort("created_at", -1)
     )
 
-    # Safe defaults
+    user_id = session.get("user_id")
+
+    # Process resolved problems safely
     for problem in resolved:
         problem["likes"] = problem.get("likes", 0)
 
-    if "user_id" in session:
-        liked = likes_collection.find_one({
-            "user_id": ObjectId(session["user_id"]),
-            "problem_id": problem["_id"]
-        })
-        problem["has_liked"] = bool(liked)
-    else:
-        problem["has_liked"] = False
+        if user_id:
+            liked = likes_collection.find_one({
+                "user_id": ObjectId(user_id),
+                "problem_id": problem["_id"]
+            })
+            problem["has_liked"] = bool(liked)
+        else:
+            problem["has_liked"] = False
 
     stats = {
         "reported": problems_collection.count_documents({}),
@@ -350,33 +390,146 @@ def impact():
         stats=stats
     )
     
+@app.route("/profile")
+def profile():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    user = users_collection.find_one(
+        {"_id": ObjectId(session["user_id"])},
+        {"password": 0}  # exclude password
+    )
+
+    # stats (optional)
+    total_votes = votes_collection.count_documents(
+        {"user_id": ObjectId(session["user_id"])}
+    )
+
+    return render_template(
+        "profile.html",
+        user=user,
+        total_votes=total_votes
+    )
+
+@app.route("/profile/update", methods=["POST"])
+def update_profile():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    name = request.form.get("name")
+
+    users_collection.update_one(
+        {"_id": ObjectId(session["user_id"])},
+        {"$set": {"name": name}}
+    )
+
+    return jsonify({"success": True})
+
+@app.route("/profile/password", methods=["POST"])
+def change_password():
+    if "user_id" not in session:
+        return jsonify({"error": "Unauthorized"}), 401
+
+    current = request.form.get("current_password")
+    new = request.form.get("new_password")
+
+    user = users_collection.find_one(
+        {"_id": ObjectId(session["user_id"])}
+    )
+
+    if not check_password_hash(user["password"], current):
+        return jsonify({"error": "Wrong current password"}), 400
+
+    users_collection.update_one(
+        {"_id": ObjectId(session["user_id"])},
+        {"$set": {"password": generate_password_hash(new)}}
+    )
+
+    return jsonify({"success": True})
+
 @app.route("/working")
 def working():
     return render_template("works.html")
 
+@app.route("/community-guidelines")
+def community_guidelines():
+    return render_template("community_guidelines.html")
+
+@app.route("/terms")
+def terms():
+    return render_template("terms.html")
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    otp_sent = False
+    error = None
+
     if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
-        password = request.form.get("password")
 
-        # Check if user already exists
+        # STEP 2: OTP verification
+        if "otp" in request.form:
+            pending = session.get("pending_user")
+
+            if not pending:
+                error = "Session expired. Please register again."
+                return render_template("register.html", otp_sent=False, error=error)
+
+            if request.form["otp"] != pending["otp"]:
+                error = "Invalid OTP"
+                return render_template("register.html", otp_sent=True, error=error)
+
+            if datetime.utcnow() > datetime.fromisoformat(pending["expires"]):
+                session.pop("pending_user", None)
+                error = "OTP expired. Please try again."
+                return render_template("register.html", otp_sent=False, error=error)
+
+            # ✅ Create user
+            users_collection.insert_one({
+                "name": pending["name"],
+                "email": pending["email"],
+                "password": pending["password"],
+                "created_at": datetime.utcnow(),
+                "is_verified": True
+            })
+
+            session.pop("pending_user", None)
+            session["toast_success"] = "Account created successfully! Please log in."
+            return redirect("/login")
+
+        # STEP 1: Registration → Send OTP
+        name = request.form["name"]
+        email = request.form["email"]
+        password = request.form["password"]
+
         if users_collection.find_one({"email": email}):
-            return "User already exists"
+            error = "Email already registered"
+            return render_template("register.html", otp_sent=False, error=error)
 
-        hashed_password = generate_password_hash(password)
+        otp = str(random.randint(100000, 999999))
 
-        users_collection.insert_one({
+        session["pending_user"] = {
             "name": name,
             "email": email,
-            "password": hashed_password,
-            "created_at": datetime.utcnow()
-        })
+            "password": generate_password_hash(password),
+            "otp": otp,
+            "expires": (datetime.utcnow() + timedelta(minutes=5)).isoformat()
+        }
 
-        return redirect(url_for("login"))
-    return render_template("register.html")
+        # 🔔 Send email
+        msg = Message(
+            subject="Your CivicFix OTP",
+            recipients=[email],
+            body=f"Your OTP is {otp}. Valid for 5 minutes."
+        )
+        mail.send(msg)
+
+        otp_sent = True
+
+    return render_template("register.html", otp_sent=otp_sent, error=error)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -406,7 +559,7 @@ def logout():
 def admin_dashboard():
 
     # 🔒 Admin check
-    if session.get("user_email") != os.getenv("ADMIN_EMAIL"):
+    if session.get("email") != os.getenv("ADMIN_EMAIL"):
         return "Unauthorized", 403
 
     total_issues = problems_collection.count_documents({})

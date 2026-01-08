@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Community Guidelines – CivicFix{% endblock %}
+{% block head %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/community_guidelines.css') }}">
+{% endblock %}
+{% block container %}
+<div class="guidelines-wrapper" data-aos="fade-up">
+
+    <!-- PAGE HEADER -->
+    <header class="guidelines-header">
+        <h1>Community Guidelines</h1>
+        <p>
+            CivicFix is built on trust, responsibility, and collective action.
+            These guidelines help keep the platform useful, safe, and respectful for everyone.
+        </p>
+    </header>
+
+    <!-- SECTION -->
+    <section class="guidelines-section">
+        <h2>🤝 Our Core Principles</h2>
+        <ul>
+            <li>Truth and transparency</li>
+            <li>Respect for people and public spaces</li>
+            <li>Responsible civic participation</li>
+            <li>Community-driven prioritization</li>
+        </ul>
+    </section>
+
+    <section class="guidelines-section">
+        <h2>✅ What You Should Do</h2>
+
+        <h3>Report Genuine Issues</h3>
+        <p>
+            Only report real civic problems you have personally observed.
+            Provide accurate details and upload relevant images where possible.
+        </p>
+
+        <h3>Vote Responsibly</h3>
+        <p>
+            Use votes to support issues that genuinely affect the community.
+            Voting helps prioritize what needs attention first.
+        </p>
+
+        <h3>Be Respectful</h3>
+        <p>
+            Treat fellow citizens, authorities, and communities with respect.
+            Disagreements should focus on issues, not individuals.
+        </p>
+    </section>
+
+    <section class="guidelines-section warning">
+        <h2>❌ What Is Not Allowed</h2>
+        <ul>
+            <li>Fake, misleading, or duplicate reports</li>
+            <li>Abusive, hateful, or threatening language</li>
+            <li>Political campaigning or propaganda</li>
+            <li>Sharing personal or private information</li>
+            <li>Misuse of export or authority features</li>
+        </ul>
+    </section>
+
+    <section class="guidelines-section">
+        <h2>🔍 Verification & Moderation</h2>
+        <p>
+            Issues may be reviewed by the community or moderators.
+            Activity patterns are monitored to prevent misuse.
+            Verified issues are highlighted to maintain transparency.
+        </p>
+    </section>
+
+    <section class="guidelines-section">
+        <h2>🛡️ Account Responsibility</h2>
+        <p>
+            You are responsible for all activity performed using your account.
+            Please keep your login credentials secure and report any suspicious behavior.
+        </p>
+    </section>
+
+    <section class="guidelines-section highlight">
+        <h2>🌍 Our Commitment</h2>
+        <p>
+            CivicFix is committed to transparency, fairness, privacy protection,
+            and empowering citizens to raise real issues that matter.
+        </p>
+    </section>
+
+    <footer class="guidelines-footer">
+        <p>
+            By using CivicFix, you agree to follow these community guidelines.
+            Let’s work together to create meaningful civic impact.
+        </p>
+    </footer>
+
+</div>
+{% endblock %}

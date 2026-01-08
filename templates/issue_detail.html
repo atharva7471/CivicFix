@@ -16,10 +16,16 @@
             <span class="verified-badge">✔ Verified</span>
             {% endif %}
         </div>
-
-        <span class="status-badge status-{{ problem.status|lower }}">
-            {{ problem.status }}
-        </span>
+        <div class="header-right">
+            <button
+                class="share-btn"
+                data-url="{{ url_for('issue_detail', issue_id=problem._id, _external=True) }}">
+                Share
+            </button>
+            <span class="status-badge status-{{ problem.status|lower }}">
+                {{ problem.status }}
+            </span>
+        </div>
     </div>
 
     <!-- TITLE -->
@@ -53,8 +59,19 @@
 
     <!-- DESCRIPTION -->
     <section class="issue-section">
-        <h3>📝 Issue Description</h3>
+        <h3>📝 Short description</h3>
         <p>{{ problem.description }}</p>
+    </section>
+
+    <section class="issue-section">
+        <h3>📝 Problem in brief</h3>
+        {% if problem.long_des %}
+        <p>{{ problem.long_des }}</p>
+        {% else %}
+        <p class="muted">
+            No additional details provided by the reporter.
+        </p>
+        {% endif %}
     </section>
 
     <!-- PRIORITY & VOTES -->
@@ -91,8 +108,9 @@
     <!-- EXPORT -->
     <section class="issue-section">
         <h3>📋 Complaint Export</h3>
-
-        {% if problem.is_verified and is_top_priority %}
+        {% if problem.status == "Resolved" %}
+        <p>Problem Resolved</p>
+        {% elif problem.is_verified and is_top_priority %}
         <a href="/export/{{ problem._id }}" class="export-btn">
             Export Official Complaint
         </a>

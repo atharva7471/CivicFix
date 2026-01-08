@@ -1,0 +1,180 @@
+.privacy-wrapper,
+.terms-wrapper,
+.guidelines-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    overflow: hidden; /* Keeps child margins inside */
+    line-height: 1.6;
+}
+
+/* --- HEADER --- */
+.privacy-header,
+.terms-header,
+.guidelines-header {
+    background-color: var(--bg-primary);
+    box-shadow: var(--card-shadow);
+    border-radius: 20px;
+    margin-bottom: 20px;
+    padding: 40px 30px;
+    text-align: center;
+}
+.privacy-header h1,
+.terms-header h1,
+.guidelines-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+}
+.privacy-header p,
+.terms-header p,
+.guidelines-header p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- SECTIONS --- */
+.privacy-section,
+.terms-section,
+.guidelines-section {
+    padding: 30px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--text-primary);
+}
+.privacy-section:last-of-type,
+.terms-section:last-of-type,
+.guidelines-section:last-of-type {
+    border-bottom: none;
+}
+.privacy-section h2,
+.terms-section h2,
+.guidelines-section h2 {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.guidelines-section h3 {
+    color: var(--text-secondary);
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    margin-top: 24px;
+}
+
+.guidelines-section h3:first-of-type {
+    margin-top: 0;
+}
+.privacy-section p,
+.terms-section p,
+.guidelines-section p {
+    margin-bottom: 0;
+    color: var(--text-muted);
+}
+
+/* --- LIST STYLING --- */
+.privacy-section ul,
+.terms-section ul,
+.guidelines-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.privacy-section ul li,
+.terms-section ul li,
+.guidelines-section ul li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+}
+.privacy-section ul li::before,
+.terms-section ul li::before,
+.guidelines-section ul li::before {
+    content: "•";
+    color: var(--text-muted);
+    font-weight: bold;
+    font-size: 1.5rem;
+    position: absolute;
+    left: 0;
+    top: -5px;
+    line-height: 1.5;
+}
+
+/* --- SPECIAL STATES (Warning & Highlight) --- */
+.privacy-section.warning,
+.terms-section.warning,
+.guidelines-section.warning {
+    background-color: #c29090;
+    border-left: 5px solid var(--status-open);
+    border-radius: 20px;
+}
+.privacy-section.warning h2,
+.terms-section.warning h2,
+.guidelines-section.warning h2 {
+    color: var(--status-open);
+}
+.privacy-section.warning ul li::before,
+.terms-section.warning ul li::before,
+.guidelines-section.warning ul li::before {
+    color: var(--status-open);
+}
+
+.privacy-section.highlight,
+.guidelines-section.highlight {
+    border-radius: 20px;
+    background-color: #8bc6b6;
+    border-left: 5px solid var(--status-resolved);
+}
+
+.privacy-section.highlight h2,
+.privacy-section.highlight p,
+.guidelines-section.highlight h2,
+.guidelines-section.highlight p {
+    color: #065f46;
+}
+
+/* --- FOOTER --- */
+.privacy-footer,
+.terms-footer,
+.guidelines-footer {
+    background-color: var(--civic-bg);
+    padding: 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-body);
+    border-top: 1px solid #e5e7eb;
+}
+.privacy-footer p,
+.terms-footer p,
+.guidelines-footer p {
+    margin: 0;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media (max-width: 600px) {
+    .terms-wrapper,
+    .privacy-wrapper,
+    .guidelines-wrapper {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .terms-header,
+    .privacy-header,
+    .guidelines-header {
+        padding: 30px 20px;
+    }
+    .terms-section,
+    .privacy-section,
+    .guidelines-section {
+        padding: 20px;
+    }
+}

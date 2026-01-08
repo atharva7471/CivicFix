@@ -1,0 +1,65 @@
+.profile-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-glass {
+    width: 380px;
+    padding: 28px;
+    border-radius: 20px;
+    background: var(--bg-primary);
+    backdrop-filter: blur(18px);
+    box-shadow: var(--card-shadow);
+}
+
+.profile-glass .title {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.profile-glass label {
+    font-size: 0.9rem;
+    opacity: 1;
+}
+
+.profile-glass input {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0 14px;
+    border-radius: 10px;
+    background-color: var(--always-white);
+    border: none;
+}
+
+.profile-glass button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    background: var(--status-resolved);
+    color: white;
+    cursor: pointer;
+}
+
+.profile-glass button.danger {
+    background: var(--status-open);
+}
+
+.profile-glass button:hover {
+    opacity: 0.9;
+}
+
+.divider {
+    height: 1px;
+    background: var(--bg-body);
+    margin: 20px 0;
+}
+
+.stats {
+    text-align: center;
+    line-height: 2rem;
+    opacity: 0.9;
+}

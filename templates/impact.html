@@ -5,7 +5,7 @@
     href="{{ url_for('static', filename='css/impact.css') }}">
 {% endblock %}
 {% block container %}
-<div class="impact-wrapper">
+<div class="impact-wrapper" data-aos="fade-up">
     <div class="impact-head">
         <div class="title">
             <h1>Our Civic Impact</h1>
@@ -48,17 +48,25 @@
         {% else %}
         <div class="feed-grid">
             {% for problem in in_progress %}
-            <div class="problem-card border-yellow">
+            <div class="problem-card">
                 <div class="card-header">
                     <span class="category-tag">{{ problem.category }}</span>
                     <span class="status-badge progress">Addressing...</span>
                 </div>
-                <div class="card-body">
-                    <p>{{ problem.description }}</p>
-                    <div class="location-info">📍 {{ problem.location.area_name
-                        }}</div>
-                </div>
+                <a href="/issue/{{ problem._id }}" class="card-link">
+                    <div class="card-body">
+                        <p>{{ problem.description }}</p>
+                        <div class="location-info">📍 {{
+                            problem.location.area_name
+                            }}</div>
+                    </div>
+                </a>
                 <div class="card-footer">
+                    <button
+                        class="share-btn"
+                        data-url="{{ url_for('issue_detail', issue_id=problem._id, _external=True) }}">
+                        Share
+                    </button>
                     <small>Verified & assigned to department</small>
                 </div>
             </div>
@@ -79,16 +87,23 @@
                     <span class="category-tag">{{ problem.category }}</span>
                     <span class="status-badge resolved">Fixed</span>
                 </div>
-                <div class="card-body">
-                    <p>{{ problem.description }}</p>
-                    <div class="location-info">📍 {{ problem.location.area_name
-                        }}</div>
-                </div>
+                <a href="/issue/{{ problem._id }}" class="card-link">
+                    <div class="card-body">
+                        <p>{{ problem.description }}</p>
+                        <div class="location-info">📍 {{
+                            problem.location.area_name
+                            }}</div>
+                    </div>
+                </a>
                 <div class="card-footer">
                     <button class="like-btn" data-id="{{ problem._id }}">
                         ❤️ <span>{{ problem.likes }}</span>
                     </button>
-
+                    <button
+                        class="share-btn"
+                        data-url="{{ url_for('issue_detail', issue_id=problem._id, _external=True) }}">
+                        Share
+                    </button>
                     <small>Solution verified by community</small>
                 </div>
             </div>

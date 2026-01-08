@@ -10,12 +10,19 @@
     <link
       href="https://unpkg.com/aos@2.3.4/dist/aos.css"
       rel="stylesheet" />
+    <link rel="icon" type="image/png"
+            href="{{ url_for('static', filename='images/favicon.png') }}">
     <!-- Page specific CSS -->
     {% block head %}{% endblock %}
   </head>
   <body>
     <nav class="navbar" id="navbar" data-aos="fade-down" data-aos-once="false">
       <a href="{{ url_for('home') }}">Civic<span>Fix</span></a>
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
       <ul class="nav-links">
         <li><a href="/home">Home</a></li>
         <li><a href="/add_problem">Report Issue</a></li>
@@ -27,7 +34,7 @@
             Profile
           </button>
           <div class="account-dropdown">
-            <a href="/profile">👤{{ session.get("user_name", "Account") }}</a>
+            <a href="/profile">👤{{ session.get("name", "Account") }}</a>
             <a href="/my_issues">My Issues</a>
             <a href="/logout" class="logout">Logout</a>
           </div>
@@ -62,30 +69,47 @@
             complaints into community impact through transparent voting
             and priority-based escalation.</p>
           <div class="social-icons">
-            <a href="#">🐦</a>
-            <a href="#">📘</a>
-            <a href="#">📸</a>
-            <a href="#">💼</a>
+            <a href="https://athoofolio.vercel.app/"><img
+                src="{{ url_for('static', filename='images/portfolio.svg') }}"
+                alt="portfolio"
+                class="theme-icon"></a>
+            <a href="https://www.linkedin.com/in/atharva-bhosale-7471abc/"><img
+                src="{{ url_for('static', filename='images/linkedin.svg') }}"
+                alt="linkedin"
+                class="theme-icon"></a>
+            <a href="https://github.com/atharva7471"><img
+                src="{{ url_for('static', filename='images/github.svg') }}"
+                alt="github"
+                class="theme-icon"></a>
+            <a
+              href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=atharva7471@gmail.com"><img
+                src="{{ url_for('static', filename='images/mail.svg') }}"
+                alt="mail"
+                class="theme-icon"></a>
           </div>
         </div>
 
         <div class="footer-links">
           <h4>Platform</h4>
           <ul>
-            <li><a href="/report">Report Issue</a></li>
+            <li><a href="/add_problem">Report Issue</a></li>
             <li><a href="/impact">Impact Dashboard</a></li>
-            <li><a href="/how-it-works">How It Works</a></li>
-            <li><a href="/areas">Local Feed</a></li>
+            <li><a href="/working">How It Works</a></li>
+            <li><a href="/home#feed">Local Feed</a></li>
+            <li><a href="/admin/dashboard">Admin</a></li>
           </ul>
         </div>
 
         <div class="footer-links">
           <h4>Support</h4>
           <ul>
-            <li><a href="#">Join</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="/mailto:atharva7471@gmail.com">Contact Us</a></li>
+            <li><a href="/register">Join</a></li>
+            <li><a href="/community-guidelines">Community Guidelines</a></li>
+            <li><a href="/terms">Terms of Service</a></li>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a
+                href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=atharva7471@gmail.com">Contact
+                Us</a></li>
           </ul>
         </div>
       </div>
@@ -95,6 +119,7 @@
           community.</p>
       </div>
     </footer>
+    <div id="toast-container"></div>
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <!-- Page-specific JS -->

@@ -59,34 +59,4 @@ document.addEventListener("DOMContentLoaded", () => {
       navbar.classList.toggle("fixed", window.scrollY > heroHeight);
     });
   }
-  document.querySelectorAll(".share-btn").forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
-      e.stopPropagation();
-
-      const url = btn.dataset.url;
-      const title = "Civic Issue Reported";
-      const text = "Check out this civic issue on CivicFix.";
-
-      // ✅ Mobile / supported browsers
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: title,
-            text: text,
-            url: url,
-          });
-        } catch (err) {
-          console.log("Share cancelled");
-        }
-      } else {
-        // 💻 Desktop fallback → copy link
-        try {
-          await navigator.clipboard.writeText(url);
-          showToast("Link copied to clipboard!");
-        } catch (err) {
-          alert("Copy failed. Please copy manually.");
-        }
-      }
-    });
-  });
 });
