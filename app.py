@@ -117,7 +117,7 @@ def submit_problem():
             "coordinates": [longitude, latitude],
             "area_name": area_name
         },
-        "status": "Pending",
+        "status": "pending",
         "votes": 0,
         "likes": 0,
         "is_verified": False,
