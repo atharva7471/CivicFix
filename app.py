@@ -18,9 +18,9 @@ app.secret_key = os.getenv("APP_SECRET_KEY")
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = "atharva7471@gmail.com"
-app.config["MAIL_PASSWORD"] = "xtlxmrvyqujj zlez"  # Gmail App Password
-app.config["MAIL_DEFAULT_SENDER"] = "CivicFix atharva7471@gmail.com"
+app.config["MAIL_USERNAME"] = os.getenv("ADMIN_EMAIL")
+app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")  # Gmail App Password
+app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
 
 mail = Mail(app)
 # MongoDB storage
