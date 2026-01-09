@@ -7,6 +7,8 @@ from urllib.parse import quote_plus
 from functools import wraps
 from datetime import datetime,timedelta
 from flask_mail import Mail, Message
+import cloudinary
+import cloudinary.uploader
 from dotenv import load_dotenv
 import random
 import os
@@ -21,8 +23,15 @@ app.config["MAIL_USE_TLS"] = os.getenv("MAIL_USE_TLS")
 app.config["MAIL_USERNAME"] = os.getenv("ADMIN_EMAIL")
 app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")  # Gmail App Password
 app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
-
 mail = Mail(app)
+
+#Image storage
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+)
+
 # MongoDB storage
 MONGO_URI = os.getenv("MONGO_URI")
 client = MongoClient(MONGO_URI)
@@ -31,10 +40,6 @@ problems_collection = db["problems"]
 users_collection = db["users"]
 votes_collection = db["votes"]
 likes_collection = db["likes"]
-
-# Upload folder
-UPLOAD_FOLDER = "static/uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 CATEGORY_WEIGHTS = {
     "Road / Pothole": 3,
@@ -86,41 +91,52 @@ def get_top_priority_issue_ids(limit=5):
 def submit_problem():
     if "user_id" not in session:
         return redirect(url_for("login"))
+
     category = request.form.get("category")
     description = request.form.get("description")
     long_des = request.form.get("long_des")
-    latitude = float(request.form.get("latitude"))
-    longitude = float(request.form.get("longitude"))
-    area_name = request.form.get("area_name") 
-    image = request.files.get("image")
-    # ✅ Verification for latitude & longitude
+    latitude = request.form.get("latitude")
+    longitude = request.form.get("longitude")
+    area_name = request.form.get("area_name")
+    file = request.files.get("image")
+
+    # ✅ Validate location
     if not latitude or not longitude:
         return jsonify({"error": "Location is required"}), 400
-    filename = None
-    if image and image.filename != "":
-        filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
+    latitude = float(latitude)
+    longitude = float(longitude)
+
+    # ✅ Create problem FIRST (NO image here)
     problem = {
         "category": category,
         "description": description,
         "long_des": long_des,
-        # 📍 LOCATION DATA
         "location": {
             "type": "Point",
-            "coordinates": [longitude, latitude],  # IMPORTANT: lng first
+            "coordinates": [longitude, latitude],
             "area_name": area_name
         },
-        "image": f"uploads/{filename}" if filename else None,
-        "status": "pending",
+        "status": "Pending",
         "votes": 0,
+        "likes": 0,
         "is_verified": False,
-        "likes":0, 
-        "user_id": ObjectId(session["user_id"]), # 🔥 ownership
+        "user_id": ObjectId(session["user_id"]),
         "reported_by": session.get("name"),
-        "created_at": datetime.utcnow(),
+        "created_at": datetime.utcnow()
     }
+
+    # ✅ Cloudinary upload (optional)
+    if file and file.filename:
+        upload_result = cloudinary.uploader.upload(
+            file,
+            folder="civicfix/issues"
+        )
+        problem["image"] = upload_result["secure_url"]
+
+    # ✅ Save to DB
     problems_collection.insert_one(problem)
+
     return redirect(url_for("home"))
 
 @app.route("/vote/<problem_id>", methods=["POST"])

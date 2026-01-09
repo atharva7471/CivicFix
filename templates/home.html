@@ -136,7 +136,7 @@
                         <!-- IMAGE -->
                         {% if problem.image %}
                         <img
-                            src="{{ url_for('static', filename=problem.image) }}"
+                            src="{{ problem.image }}"
                             class="problem-img">
                         {% endif %}
 

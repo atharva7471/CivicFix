@@ -52,7 +52,7 @@
     <!-- IMAGE -->
     {% if problem.image %}
     <div class="issue-image">
-        <img src="{{ url_for('static', filename=problem.image) }}"
+        <img src="{{ problem.image }}"
             alt="Reported issue image">
     </div>
     {% endif %}
