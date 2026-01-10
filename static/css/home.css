@@ -254,7 +254,7 @@ body.home .container {
     font-size: 15px;
   }
 
-  body.home .container {
+  .container {
     padding-left: 24px;
     padding-right: 24px;
   }

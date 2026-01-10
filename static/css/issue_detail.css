@@ -204,50 +204,89 @@
     color: var(--text-primary);
 }
 
-/* Tablets */
-@media (max-width: 768px) {
+/* =========================
+   ISSUE DETAIL RESPONSIVE
+   ========================= */
+@media (max-width: 640px) {
+  /* 1. Remove outer container padding/margins */
   .issue-detail-wrapper {
-    padding: 1.2rem;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 16px 12px; /* Small breathing room for text */
+    width: 100%;
+    max-width: 100%;
   }
 
-  /* Header stack */
+  /* 2. Fix Header Layout (Category and Status) */
   .issue-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
+    display: flex;
+    align-items: center;
   }
 
   .header-right {
-    width: 100%;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
   }
 
+  /* 3. Text Scaling */
   .issue-title {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
+    margin: 15px 0;
+    line-height: 1.2;
   }
 
-  /* Meta info stack */
-  .issue-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+  .issue-meta p {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
   }
 
-  /* Image scaling */
+  .issue-section h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .issue-section p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* 4. Image adjustments */
   .issue-image img {
-    width: 100%;
-    height: auto;
-    border-radius: inherit;
+    border-radius: 10px;
+    max-height: 250px; /* Prevent long images from taking too much space */
+    object-fit: cover;
   }
 
-  /* Info grid → 2 columns */
+  /* 5. Priority Info Grid (Stack boxes vertically) */
   .info-grid {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr; /* Force 1 column instead of 3 */
+    gap: 10px;
   }
 
-  .export-btn {
+  .info-box {
+    padding: 12px;
+    display: flex;
+    justify-content: space-between; /* Horizontal layout for mobile */
+    align-items: center;
+  }
+
+  .info-box .value {
+    font-size: 1.1rem;
+    margin-top: 0; /* Align with label */
+  }
+
+  /* 6. Buttons & Actions */
+  .export-btn, .share-btn {
     width: 100%;
+    text-align: center;
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .issue-actions {
+    margin-top: 30px;
     text-align: center;
   }
 }

@@ -11,7 +11,7 @@
       href="https://unpkg.com/aos@2.3.4/dist/aos.css"
       rel="stylesheet" />
     <link rel="icon" type="image/png"
-            href="{{ url_for('static', filename='images/favicon.png') }}">
+      href="{{ url_for('static', filename='images/favicon.png') }}">
     <!-- Page specific CSS -->
     {% block head %}{% endblock %}
   </head>
@@ -61,6 +61,7 @@
     <div class="container">
       {% block container %}{% endblock %}
     </div>
+    {% if not hide_footer %}
     <footer class="civic-footer" data-aos="fade">
       <div class="footer-container">
         <div class="footer-brand">
@@ -119,6 +120,7 @@
           community.</p>
       </div>
     </footer>
+    {% endif %}
     <div id="toast-container"></div>
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>

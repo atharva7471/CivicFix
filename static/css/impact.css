@@ -224,61 +224,94 @@ h1 {
     color: #9ca3af;
     font-style: italic;
 }
-/* Mobile */
-@media (max-width: 480px) {
+/* =========================
+   IMPACT PAGE RESPONSIVE
+   ========================= */
+
+@media (max-width: 640px) {
+  /* 1. Reset Wrapper & Grid */
   .impact-wrapper {
-    padding: 1rem;
+    padding: 15px 12px;
   }
 
-  .title h1 {
-    font-size: 1.4rem;
+  .impact-head {
+    display: flex;         /* Switch from Grid to Flex */
+    flex-direction: column; 
+    text-align: center;
+    margin-bottom: 20px;
   }
 
   .subtitle {
-    font-size: 0.85rem;
-  }
-
-  .title a {
-    font-size: 0.85rem;
-  }
-
-  /* Stats → single column */
-  .impact-stats {
-    flex-direction: column;
-  }
-
-  .stat-card {
-    width: 100%;
-  }
-
-  .stat-num {
-    font-size: 1.6rem;
-  }
-
-  /* Tabs full width */
-  .tab-btn {
-    width: 100%;
-  }
-
-  /* Feed grid → single column */
-  .feed-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .problem-card p {
+    margin-bottom: 15px;
     font-size: 0.9rem;
   }
 
-  .location-info,
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    font-size: 0.8rem;
+  /* 2. Compact Stats (2x2 Grid) */
+  .impact-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns is better than 1 long list */
+    gap: 12px;
+    margin-top: 20px;
   }
 
-  .share-btn,
-  .like-btn {
+  .stat-card {
+    padding: 15px 10px;
+    border-radius: 12px;
+  }
+
+  .stat-num {
+    font-size: 1.4rem; /* Scale down numbers */
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+  }
+
+  /* 3. Tabs (Full width buttons) */
+  .impact-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+
+  .tab-btn {
+    padding: 10px 5px;
     font-size: 0.85rem;
+    text-align: center;
+    border-bottom-width: 2px;
+  }
+
+  /* 4. Problem Cards (Full Screen Scale) */
+  .feed-grid {
+    grid-template-columns: 1fr; /* Single column */
+    gap: 16px;
+  }
+
+  .problem-card {
+    padding: 16px;
+    box-shadow: none;       /* Flatter look */
+    border: 1px solid var(--border-light);
+  }
+
+  .card-body p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  /* 5. Footer Adjustments */
+  .card-footer {
+    flex-direction: column; /* Stack share/like and the small text */
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .card-footer small {
+    font-size: 0.75rem;
+    order: -1; /* Put the text above the buttons */
+  }
+
+  .share-btn, .like-btn {
+    width: 100%; /* Make action buttons easy to tap */
+    text-align: center;
   }
 }

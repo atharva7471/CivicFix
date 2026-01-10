@@ -138,7 +138,7 @@
 .privacy-section.highlight p,
 .guidelines-section.highlight h2,
 .guidelines-section.highlight p {
-    color: #065f46;
+    color: var(--status-resolved);
 }
 
 /* --- FOOTER --- */

@@ -114,14 +114,66 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
   transform: translateY(-1px);
 }
-/* --- Mobile Responsiveness --- */
-@media (max-width: 480px) {
-  .auth-card {
-    padding: 30px 20px; /* Reduce padding slightly on small screens */
-    box-shadow: none; /* Optional: Remove shadow for a flatter mobile look */
+/* =========================
+   AUTH RESPONSIVE (Full Screen)
+   ========================= */
+
+@media (max-width: 640px) {
+  /* 1. Remove the 3rem margin and fix height */
+  .auth-page {
+    margin: 0 !important;      /* Removes the huge outer gaps */
+    min-height: 70vh;         /* Use min-height instead of max-height */
+    align-items: flex-start;   /* Start from top so keyboard doesn't hide inputs */
+    padding-top: 10vh;         /* Push form down slightly from the very top */
   }
 
+  /* 2. Flatten the Card */
+  .auth-card {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 0;          /* Full width edges */
+    box-shadow: none;          /* Remove card shadow */
+    padding: 20px 24px;        /* Compact internal padding */
+    background: transparent;   /* Blends into the body */
+  }
+
+  /* 3. Scale Down Text & Inputs */
   .auth-card h2 {
-    font-size: 1.75rem;
+    font-size: 1.4rem;         /* Smaller heading */
+    margin-bottom: 15px;
+  }
+
+  .auth-card p {
+    font-size: 0.8rem;         /* Scale down instructions */
+    margin-top: 10px;
+  }
+
+  .auth-card input {
+    font-size: 16px;           /* Prevents iOS zoom-on-tap */
+    padding: 10px 12px;        /* Slimmer inputs */
+  }
+
+  /* 4. Make buttons easier to tap */
+  .auth-card button {
+    padding: 16px;
+    font-size: 1rem;
+    margin-top: 15px;
+  }
+
+  /* 5. Error Message Scaling */
+  .error {
+    font-size: 0.8rem;
+    padding: 8px;
+    border-radius: 8px;
+  }
+}
+
+/* Fix for ultra-small screens */
+@media (max-width: 360px) {
+  .auth-card {
+    padding: 15px;
+  }
+  .auth-card h2 {
+    font-size: 1.2rem;
   }
 }

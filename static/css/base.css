@@ -192,7 +192,7 @@ body {
 }
 
 .account-dropdown .logout {
-  color: #ef4444;
+  color: var(--status-open);
   font-weight: 500;
 }
 
@@ -263,7 +263,7 @@ THEME TOGGLE (SVG ICONS)
 PAGE CONTAINER
 ========================= */
 .container {
-  padding: 120px 64px 64px;
+  padding: 110px 4px 4px;
   min-height: 100vh;
   background: var(--bg-body);
 }
@@ -291,11 +291,11 @@ PAGE CONTAINER
 }
 
 .toast.success {
-  border-left: 4px solid #22c55e;
+  border-left: 4px solid var(--status-resolved);
 }
 
 .toast.error {
-  border-left: 4px solid #ef4444;
+  border-left: 4px solid var(--status-open);
 }
 
 .vote-btn.voted {
@@ -312,18 +312,18 @@ PAGE CONTAINER
 }
 
 .status-pending {
-  background: #fff7ed;
-  color: #ea580c;
+  background: var(--bg-body);
+  color: var(--status-open);
 }
 
 .status-acknowledged {
-  background: #ecfeff;
-  color: #0284c7;
+  background: var(--bg-body);
+  color: var(--status-pending);
 }
 
 .status-resolved {
-  background: #ecfdf5;
-  color: #16a34a;
+  background: var(--bg-body);
+  color: var(--status-resolved);
 }
 
 .admin-status-form {
@@ -336,7 +336,7 @@ PAGE CONTAINER
   margin-left: auto;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #16a34a;
+  color: var(--status-resolved);
   background: rgba(34, 197, 94, 0.15);
   padding: 4px 10px;
   border-radius: 999px;
@@ -448,11 +448,11 @@ PAGE CONTAINER
 }
 
 .menu-toggle .bar {
-  height: 3px;
+  height: 2px;
   width: 25px;
   background-color: #333;
   /* Use your existing text color variable here */
-  margin: 4px 0;
+  margin: 3px 0;
   transition: 0.3s;
 }
 
@@ -495,15 +495,15 @@ PAGE CONTAINER
     top: 100%;
     right: 0;
     width: 60%;
+    padding: 10px;
+    border-bottom-left-radius: 20px;
     background-color: inherit;
-    padding: 20px 0;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--card-shadow);
   }
   .nav-links.active {
     display: flex;
   }
   .nav-links li {
-    margin: 15px 0;
     text-align: center;
   }
   .account-dropdown {
