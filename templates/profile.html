@@ -24,6 +24,7 @@
 
         <!-- PASSWORD FORM -->
         <form id="passwordForm">
+            {% if not user.is_demo %}
             <label>Current Password</label>
             <input type="password" name="current_password" required>
 
@@ -31,6 +32,9 @@
             <input type="password" name="new_password" required>
 
             <button type="submit" class="danger">Change Password</button>
+            {% else %}
+            <small>🔒 Can't Update Password for demo account</small>
+            {% endif %}
         </form>
 
         <div class="divider"></div>

@@ -454,6 +454,11 @@ def update_profile():
 def change_password():
     if "user_id" not in session:
         return jsonify({"error": "Unauthorized"}), 401
+    # 🚫 BLOCK demo account
+    if user.get("is_demo"):
+        return jsonify({
+            "error": "Password change is disabled for demo account"
+        }), 403
 
     current = request.form.get("current_password")
     new = request.form.get("new_password")
