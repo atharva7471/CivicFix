@@ -44,3 +44,10 @@ FLASK_SECRET_KEY=your_secret_key
 ```bash
 python app.py
 ```
+
+
+Do the changes in export window responsiveness
+upload it 
+post ready on gpt
+change name of domain
+upload ss
